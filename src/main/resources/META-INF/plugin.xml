@@ -20,8 +20,13 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="io.github.askmeagain.macromagic.MacroTestAction"
-                class="io.github.askmeagain.macromagic.MacroTestAction" text="MacroTestAction"
-                description="MacroTestAction"/>
+        <action id="io.github.askmeagain.macromagic.RecordMacroAction"
+                class="io.github.askmeagain.macromagic.RecordMacroAction"
+                text="MacroMagicRecordingAction"
+                description="MacroMagicRecordingAction"/>
+        <action id="io.github.askmeagain.macromagic.RunMacroAction"
+                class="io.github.askmeagain.macromagic.RunMacroAction"
+                text="MacroMagicRunAction"
+                description="MacroMagicRunAction"/>
     </actions>
 </idea-plugin>
