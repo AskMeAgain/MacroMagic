@@ -13,19 +13,25 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <typedHandler implementation="io.github.askmeagain.macromagic.listener.CharRecorderListener"/>
     </extensions>
 
     <applicationListeners>
     </applicationListeners>
 
+    <projectListeners>
+        <listener class="io.github.askmeagain.macromagic.listener.ActionRecorderListener"
+                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+    </projectListeners>
+
     <actions>
         <!-- Add your actions here -->
-        <action id="io.github.askmeagain.macromagic.RecordMacroAction"
-                class="io.github.askmeagain.macromagic.RecordMacroAction"
+        <action id="io.github.askmeagain.macromagic.actions.RecordMacroAction"
+                class="io.github.askmeagain.macromagic.actions.RecordMacroAction"
                 text="MacroMagicRecordingAction"
                 description="MacroMagicRecordingAction"/>
-        <action id="io.github.askmeagain.macromagic.RunMacroAction"
-                class="io.github.askmeagain.macromagic.RunMacroAction"
+        <action id="io.github.askmeagain.macromagic.actions.RunMacroAction"
+                class="io.github.askmeagain.macromagic.actions.RunMacroAction"
                 text="MacroMagicRunAction"
                 description="MacroMagicRunAction"/>
     </actions>
