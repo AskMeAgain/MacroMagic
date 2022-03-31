@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
+import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
 import io.github.askmeagain.macromagic.service.MacroMagicService;
 import io.github.askmeagain.macromagic.actions.PersistMacroAction;
 import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
@@ -29,7 +30,7 @@ public class ActionRecorderListener implements AnActionListener {
 
   @Override
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull AnActionEvent event) {
-    if (!(action instanceof RecordMacroAction) && !(action instanceof PersistMacroAction)) {
+    if (!(action instanceof MacroMagicInternal)) {
       log.info(action.getTemplateText());
       macroMagicService.addAction(action);
     }

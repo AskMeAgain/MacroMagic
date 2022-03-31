@@ -14,6 +14,8 @@ import com.intellij.ui.content.ContentFactory;
 import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.service.MacroMagicPersistingService;
 import io.github.askmeagain.macromagic.service.MacroMagicService;
+import io.github.askmeagain.macromagic.windows.buttons.ClearHistoryButton;
+import io.github.askmeagain.macromagic.windows.buttons.RemoveEntryFromHistoryButton;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -44,11 +46,11 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 20,
         new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Add), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Remove), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Actions.GC), ActionPlaces.UNKNOWN, MINIMUM_SIZE)
+        new RemoveEntryFromHistoryButton(macroMagicService),
+        new ClearHistoryButton(macroMagicService)
     );
 
-    var jList = new JBList<>(macroMagicService.getActionHistory());
+    var jList = macroMagicService.getAnActionJBList();
     jList.setSelectedIndex(0);
 
     var pane = new JBScrollPane(jList);
@@ -57,7 +59,7 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
     var historyPanel = new JPanel();
 
     historyPanel.setLayout(new BoxLayout(historyPanel, BoxLayout.Y_AXIS));
-    historyPanel.add(getTitleLabel("History"));
+    historyPanel.add(ToolUtils.getTitleLabel("History"));
     historyPanel.add(buttonToolBar);
     historyPanel.add(pane);
 
@@ -70,17 +72,18 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
         new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Add), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
         new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Remove), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
         new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Actions.GC), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Actions.Execute), ActionPlaces.UNKNOWN, MINIMUM_SIZE)
+        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Actions.Execute), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
+        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Vcs.Merge), ActionPlaces.UNKNOWN, MINIMUM_SIZE)
     );
 
-    var jList = new JBList<>(macroMagicPersistingService.getPersistedActions());
+    var jList = macroMagicPersistingService.createJbList();
     var pane = new JBScrollPane(jList);
     pane.setSize(1000, 400);
 
     var historyPanel = new JPanel();
 
     historyPanel.setLayout(new BoxLayout(historyPanel, BoxLayout.Y_AXIS));
-    historyPanel.add(getTitleLabel("Available Macros"));
+    historyPanel.add(ToolUtils.getTitleLabel("Available Macros"));
     historyPanel.add(buttonToolBar);
     historyPanel.add(pane);
 
@@ -99,11 +102,4 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
     return buttonPanel;
   }
 
-  private JLabel getTitleLabel(String title) {
-    var label = new JLabel(title, SwingConstants.LEFT);
-    label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-    label.setMinimumSize(new Dimension(Integer.MAX_VALUE, 30));
-    label.setOpaque(true);
-    return label;
-  }
 }

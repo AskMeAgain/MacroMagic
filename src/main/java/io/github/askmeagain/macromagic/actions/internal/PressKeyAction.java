@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class PressKeyAction extends AnAction {
+public class PressKeyAction extends AnAction implements MacroMagicInternal {
 
   @Getter
   private int extendedKeyCodeForChar;

@@ -12,4 +12,12 @@ public class ToolUtils {
     presentation.setIcon(icon);
     return presentation;
   }
+
+  public static JLabel getTitleLabel(String title) {
+    var label = new JLabel(title, SwingConstants.LEFT);
+    label.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+    label.setMinimumSize(new Dimension(Integer.MAX_VALUE, 30));
+    label.setOpaque(true);
+    return label;
+  }
 }

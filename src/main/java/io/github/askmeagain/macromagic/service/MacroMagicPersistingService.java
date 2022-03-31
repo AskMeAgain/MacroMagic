@@ -4,6 +4,7 @@ import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
+import com.intellij.ui.components.JBList;
 import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.PersistedActionDto;
 import lombok.Getter;
@@ -22,6 +23,10 @@ public final class MacroMagicPersistingService {
 
   @Getter
   private final DefaultListModel<String> persistedActions = new DefaultListModel<>();
+
+  public JBList<String> createJbList(){
+    return new JBList<>(persistedActions);
+  }
 
   public void persistActions(DefaultListModel<AnAction> actions, String name) {
     var result = new ArrayList<PersistedActionDto>();
