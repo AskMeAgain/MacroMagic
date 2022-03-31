@@ -2,8 +2,11 @@ package io.github.askmeagain.macromagic.listener;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
-import io.github.askmeagain.macromagic.MacroMagicService;
+import io.github.askmeagain.macromagic.service.MacroMagicService;
+import io.github.askmeagain.macromagic.actions.PersistMacroAction;
+import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.actions.RecordMacroAction;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
@@ -19,12 +22,16 @@ public class ActionRecorderListener implements AnActionListener {
   }
 
   @Override
+  public void beforeEditorTyping(char c, @NotNull DataContext dataContext) {
+    log.info(String.valueOf(c));
+    macroMagicService.addAction(new PressKeyAction(c));
+  }
+
+  @Override
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull AnActionEvent event) {
-    if (macroMagicService.isRunning()) {
-      if (!(action instanceof RecordMacroAction)) {
-        log.info(action.getTemplateText());
-        macroMagicService.addAction(action);
-      }
+    if (!(action instanceof RecordMacroAction) && !(action instanceof PersistMacroAction)) {
+      log.info(action.getTemplateText());
+      macroMagicService.addAction(action);
     }
   }
 }

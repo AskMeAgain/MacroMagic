@@ -1,6 +1,6 @@
 <idea-plugin>
     <id>io.github.askmeagain.macromagic.MacroMagic</id>
-    <name>Plugin display name here</name>
+    <name>MacroMagic</name>
     <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
     <description><![CDATA[
@@ -13,15 +13,17 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <typedHandler implementation="io.github.askmeagain.macromagic.listener.CharRecorderListener"/>
+        <toolWindow id="Macro Magic" secondary="false" icon="AllIcons.General.Modified" anchor="right"
+                    factoryClass="io.github.askmeagain.macromagic.windows.MacroMagicToolWindow"/>
     </extensions>
 
     <applicationListeners>
+        <listener class="io.github.askmeagain.macromagic.listener.ActionRecorderListener"
+                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
     </applicationListeners>
 
     <projectListeners>
-        <listener class="io.github.askmeagain.macromagic.listener.ActionRecorderListener"
-                  topic="com.intellij.openapi.actionSystem.ex.AnActionListener"/>
+
     </projectListeners>
 
     <actions>
@@ -34,5 +36,17 @@
                 class="io.github.askmeagain.macromagic.actions.RunMacroAction"
                 text="MacroMagicRunAction"
                 description="MacroMagicRunAction"/>
+        <action id="io.github.askmeagain.macromagic.actions.PersistMacroAction"
+                class="io.github.askmeagain.macromagic.actions.PersistMacroAction" text="MacroMagicPersistMacro"
+                description="MacroMagicPersistMacro"/>
+        <action id="io.github.askmeagain.macromagic.actions.internal.PressKeyAction"
+                class="io.github.askmeagain.macromagic.actions.internal.PressKeyAction" text="MacroMagicPressKey"
+                description="MacroMagicPersistMacro"/>
+        <action id="io.github.askmeagain.macromagic.actions.LoadMacroAction"
+                class="io.github.askmeagain.macromagic.actions.LoadMacroAction" text="MacroMagicLoadAction"
+                description="MacroMagicLoadAction"/>
+        <action id="io.github.askmeagain.macromagic.actions.OpenMacroMagicToolWindow"
+                class="io.github.askmeagain.macromagic.actions.OpenMacroMagicToolWindow" text="MacroMagicOpenToolWindow"
+                description="MacroMagicOpenToolWindow"/>
     </actions>
 </idea-plugin>

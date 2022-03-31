@@ -6,17 +6,12 @@ import com.intellij.openapi.application.ApplicationManager;
 import io.github.askmeagain.macromagic.service.MacroMagicService;
 import org.jetbrains.annotations.NotNull;
 
-public class RecordMacroAction extends AnAction {
+public class PersistMacroAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-
-    var service = ApplicationManager.getApplication().getService(MacroMagicService.class);
-
-    if (service.isRunning()) {
-      service.stopRunning();
-    } else {
-      service.setRunning();
-    }
+    ApplicationManager.getApplication()
+        .getService(MacroMagicService.class)
+        .persist();
   }
 }
