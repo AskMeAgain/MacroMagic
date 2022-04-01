@@ -19,7 +19,6 @@ public final class MacroMagicService {
     anActionJBList = new JBList<>(actionHistory);
   }
 
-  private boolean running = false;
   private final MacroMagicPersistingService persistingUtils = MacroMagicPersistingService.getInstance();
 
   @Getter
@@ -27,24 +26,15 @@ public final class MacroMagicService {
   @Getter
   private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
 
-  public boolean isRunning() {
-    return running;
-  }
+  public void createMacro(String name) {
+    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedItems = new ArrayList<AnAction>();
 
-  public void setRunning() {
-    running = true;
-    log.info("Started now");
-  }
-
-  public void stopRunning() {
-    running = false;
-    log.info("Stopped now");
-  }
-
-  public void runActions(AnActionEvent e) {
-    for (var i = 0; i < actionHistory.size(); i++) {
-      actionHistory.get(i).actionPerformed(e);
+    for (int selectedIndex : selectedIndices) {
+      selectedItems.add(actionHistory.getElementAt(selectedIndex));
     }
+
+    persistingUtils.persistActions(selectedItems, name);
   }
 
   public void addAction(AnAction action) {
@@ -52,10 +42,6 @@ public final class MacroMagicService {
       actionHistory.removeElementAt(0);
     }
     actionHistory.addElement(action);
-  }
-
-  public void persist() {
-    persistingUtils.persistActions(actionHistory, "TestName");
   }
 
   public void load() {
@@ -81,5 +67,23 @@ public final class MacroMagicService {
     }
 
     selectedItems.forEach(actionHistory::removeElement);
+  }
+
+  public void moveSelectionUp() {
+    var selectedIndices = anActionJBList.getSelectedIndices();
+
+    for (int selectedIndex : selectedIndices) {
+      var action = actionHistory.remove(selectedIndex);
+      actionHistory.insertElementAt(action, selectedIndex + 1);
+    }
+  }
+
+  public void moveSelectionDown() {
+    var selectedIndices = anActionJBList.getSelectedIndices();
+
+    for (int selectedIndex : selectedIndices) {
+      var action = actionHistory.remove(selectedIndex);
+      actionHistory.insertElementAt(action, selectedIndex - 1);
+    }
   }
 }

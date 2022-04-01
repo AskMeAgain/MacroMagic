@@ -28,25 +28,8 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="io.github.askmeagain.macromagic.actions.RecordMacroAction"
-                class="io.github.askmeagain.macromagic.actions.RecordMacroAction"
-                text="MacroMagicRecordingAction"
-                description="MacroMagicRecordingAction"/>
-        <action id="io.github.askmeagain.macromagic.actions.RunMacroAction"
-                class="io.github.askmeagain.macromagic.actions.RunMacroAction"
-                text="MacroMagicRunAction"
-                description="MacroMagicRunAction"/>
-        <action id="io.github.askmeagain.macromagic.actions.PersistMacroAction"
-                class="io.github.askmeagain.macromagic.actions.PersistMacroAction" text="MacroMagicPersistMacro"
-                description="MacroMagicPersistMacro"/>
         <action id="io.github.askmeagain.macromagic.actions.internal.PressKeyAction"
                 class="io.github.askmeagain.macromagic.actions.internal.PressKeyAction" text="MacroMagicPressKey"
                 description="MacroMagicPersistMacro"/>
-        <action id="io.github.askmeagain.macromagic.actions.LoadMacroAction"
-                class="io.github.askmeagain.macromagic.actions.LoadMacroAction" text="MacroMagicLoadAction"
-                description="MacroMagicLoadAction"/>
-        <action id="io.github.askmeagain.macromagic.actions.OpenMacroMagicToolWindow"
-                class="io.github.askmeagain.macromagic.actions.OpenMacroMagicToolWindow" text="MacroMagicOpenToolWindow"
-                description="MacroMagicOpenToolWindow"/>
     </actions>
 </idea-plugin>

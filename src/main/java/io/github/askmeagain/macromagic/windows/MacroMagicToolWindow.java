@@ -14,8 +14,7 @@ import com.intellij.ui.content.ContentFactory;
 import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.service.MacroMagicPersistingService;
 import io.github.askmeagain.macromagic.service.MacroMagicService;
-import io.github.askmeagain.macromagic.windows.buttons.ClearHistoryButton;
-import io.github.askmeagain.macromagic.windows.buttons.RemoveEntryFromHistoryButton;
+import io.github.askmeagain.macromagic.windows.buttons.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -45,9 +44,11 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   private JComponent createHistoryPanel() {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 20,
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Add), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
+        new CreateNewMacroButton(macroMagicService),
         new RemoveEntryFromHistoryButton(macroMagicService),
-        new ClearHistoryButton(macroMagicService)
+        new ClearHistoryButton(macroMagicService),
+        new MoveActionUpButton(macroMagicService),
+        new MoveActionDownButton(macroMagicService)
     );
 
     var jList = macroMagicService.getAnActionJBList();
@@ -69,15 +70,12 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   private JComponent createStoredMacrosPanel() {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 40,
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Add), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.General.Remove), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Actions.GC), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Actions.Execute), ActionPlaces.UNKNOWN, MINIMUM_SIZE),
-        new ActionButton(new PressKeyAction('a'), ToolUtils.getPresentation(AllIcons.Vcs.Merge), ActionPlaces.UNKNOWN, MINIMUM_SIZE)
+        new DeleteMacroButton(macroMagicPersistingService),
+        new RunMacroButton(macroMagicPersistingService),
+        new CombineMacroButton(macroMagicPersistingService)
     );
 
-    var jList = macroMagicPersistingService.createJbList();
-    var pane = new JBScrollPane(jList);
+    var pane = new JBScrollPane(macroMagicPersistingService.getAnActionJBList());
     pane.setSize(1000, 400);
 
     var historyPanel = new JPanel();
