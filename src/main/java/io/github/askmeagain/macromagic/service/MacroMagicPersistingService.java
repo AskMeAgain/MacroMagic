@@ -5,13 +5,12 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.ui.components.JBList;
-import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
+import io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
-import io.github.askmeagain.macromagic.entities.PersistedActionDto;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 public final class MacroMagicPersistingService {
 
   private final ActionManager actionManager = ActionManager.getInstance();
+  private final HelperService helperService = HelperService.getInstance();
 
   @Getter
   private final DefaultListModel<MacroContainer> persistedMacros = new DefaultListModel<>();
@@ -37,64 +37,16 @@ public final class MacroMagicPersistingService {
 
   public void persistActions(List<AnAction> actions, String name) {
     var result = actions.stream()
-        .map(this::serializeAction)
+        .map(helperService::serializeAction)
         .collect(Collectors.toList());
 
     log.info("'{}' got persisted: {}", name, result);
-    persistedMacros.addElement(MacroContainer.builder()
+    var macroContainer = MacroContainer.builder()
         .macroName(name)
         .actions(result)
-        .build());
-  }
-
-  public List<AnAction> loadActions(String name) {
-    var list = List.of(
-        PersistedActionDto.builder()
-            .actionId("io.github.askmeagain.macromagic.actions.internal.PressKeyAction")
-            .additionalInformation('a')
-            .build(),
-        PersistedActionDto.builder()
-            .actionId("io.github.askmeagain.macromagic.actions.internal.PressKeyAction")
-            .additionalInformation('a')
-            .build()
-    );
-
-    return list.stream()
-        .map(this::deserializeAction)
-        .collect(Collectors.toList());
-  }
-
-  public AnAction deserializeAction(PersistedActionDto persistedActionDto) {
-    var action = actionManager.getAction(persistedActionDto.getActionId());
-
-    if (action instanceof PressKeyAction) {
-      var castedAction = (PressKeyAction) action;
-      castedAction.setKeyCode(persistedActionDto.getAdditionalInformation());
-      return castedAction;
-    }
-
-    return action;
-  }
-
-  public PersistedActionDto serializeAction(AnAction anAction) {
-    if (anAction instanceof PressKeyAction) {
-      var castedAction = (PressKeyAction) anAction;
-      return PersistedActionDto.builder()
-          .actionId("io.github.askmeagain.macromagic.actions.internal.PressKeyAction")
-          .isInternal(true)
-          .additionalInformation(castedAction.getOriginalChar())
-          .build();
-    }
-
-    return PersistedActionDto.builder()
-        .isInternal(false)
-        .actionId(actionManager.getId(anAction))
         .build();
-  }
-
-  public static MacroMagicPersistingService getInstance() {
-    return ApplicationManager.getApplication()
-        .getService(MacroMagicPersistingService.class);
+    persistedMacros.addElement(macroContainer);
+    helperService.registerAction(macroContainer);
   }
 
   public void deleteSelected() {
@@ -102,7 +54,9 @@ public final class MacroMagicPersistingService {
     var selectedItems = new ArrayList<MacroContainer>();
 
     for (int selectedIndex : selectedIndices) {
-      selectedItems.add(persistedMacros.getElementAt(selectedIndex));
+      var removedMacro = persistedMacros.getElementAt(selectedIndex);
+      selectedItems.add(removedMacro);
+      helperService.unregisterAction(removedMacro);
     }
 
     selectedItems.forEach(persistedMacros::removeElement);
@@ -127,6 +81,7 @@ public final class MacroMagicPersistingService {
         .build();
 
     persistedMacros.addElement(macroContainer);
+    helperService.registerAction(macroContainer);
   }
 
   public void runSelected(AnActionEvent event) {
@@ -139,9 +94,11 @@ public final class MacroMagicPersistingService {
 
     selectedItems.stream()
         .map(MacroContainer::getActions)
-        .flatMap(Collection::stream)
-        .map(this::deserializeAction)
-        .peek(x -> System.out.println("Got: " + x))
-        .forEach(x -> x.actionPerformed(event));
+        .forEach(actions -> helperService.executeActions(actions, event));
+  }
+
+  public static MacroMagicPersistingService getInstance() {
+    return ApplicationManager.getApplication()
+        .getService(MacroMagicPersistingService.class);
   }
 }

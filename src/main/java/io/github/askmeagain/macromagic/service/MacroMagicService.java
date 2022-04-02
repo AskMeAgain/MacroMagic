@@ -46,11 +46,6 @@ public final class MacroMagicService {
     actionHistory.addElement(action);
   }
 
-  public void load() {
-    actionHistory.clear();
-    actionHistory.addAll(persistingUtils.loadActions("TestName"));
-  }
-
   public static MacroMagicService getInstance() {
     return ApplicationManager.getApplication()
         .getService(MacroMagicService.class);
