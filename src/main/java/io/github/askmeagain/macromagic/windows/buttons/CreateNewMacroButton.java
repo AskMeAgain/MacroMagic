@@ -13,7 +13,7 @@ public class CreateNewMacroButton extends ActionButton {
   public CreateNewMacroButton(MacroMagicService macroMagicService) {
     super(
         new CreateNewMacroAction(macroMagicService),
-        ToolUtils.getPresentation(AllIcons.General.Add),
+        ToolUtils.getPresentation(AllIcons.Actions.MenuSaveall),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

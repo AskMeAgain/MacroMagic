@@ -6,6 +6,8 @@ import io.github.askmeagain.macromagic.service.MacroMagicPersistingService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+
 @RequiredArgsConstructor
 public class CombineMacroAction extends AnAction implements MacroMagicInternal {
 
@@ -13,7 +15,17 @@ public class CombineMacroAction extends AnAction implements MacroMagicInternal {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    //TODO popup for name
-    macroMagicPersistingService.combineSelected("TestNameCombined");
+    var name = (String) JOptionPane.showInputDialog(null,
+        "New Macro Name:",
+        null,
+        JOptionPane.PLAIN_MESSAGE,
+        null,
+        null,
+        ""
+    );
+
+    if (name != null) {
+      macroMagicPersistingService.combineSelected(name);
+    }
   }
 }
