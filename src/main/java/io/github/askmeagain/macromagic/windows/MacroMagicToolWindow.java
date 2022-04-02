@@ -1,17 +1,13 @@
 package io.github.askmeagain.macromagic.windows;
 
-import com.intellij.icons.AllIcons;
-import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
-import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.ContentFactory;
-import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.service.MacroMagicPersistingService;
 import io.github.askmeagain.macromagic.service.MacroMagicService;
 import io.github.askmeagain.macromagic.windows.buttons.*;
@@ -73,7 +69,8 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
         MINIMUM_SIZE.height + 40,
         new DeleteMacroButton(macroMagicPersistingService),
         new RunMacroButton(macroMagicPersistingService),
-        new CombineMacroButton(macroMagicPersistingService)
+        new CombineMacroButton(macroMagicPersistingService),
+        new LoadMacroToHistoryButton(macroMagicPersistingService, macroMagicService)
     );
 
     var pane = new JBScrollPane(macroMagicPersistingService.getAnActionJBList());

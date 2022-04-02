@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public final class MacroMagicPersistingService {
 
-  private final ActionManager actionManager = ActionManager.getInstance();
   private final HelperService helperService = HelperService.getInstance();
 
   @Getter
@@ -63,12 +62,7 @@ public final class MacroMagicPersistingService {
   }
 
   public void combineSelected(String name) {
-    var selectedIndices = anActionJBList.getSelectedIndices();
-    var selectedItems = new ArrayList<MacroContainer>();
-
-    for (int selectedIndex : selectedIndices) {
-      selectedItems.add(persistedMacros.getElementAt(selectedIndex));
-    }
+    var selectedItems = getCurrentSelectedMacros();
 
     selectedItems.forEach(persistedMacros::removeElement);
 
@@ -100,5 +94,16 @@ public final class MacroMagicPersistingService {
   public static MacroMagicPersistingService getInstance() {
     return ApplicationManager.getApplication()
         .getService(MacroMagicPersistingService.class);
+  }
+
+  public List<MacroContainer> getCurrentSelectedMacros() {
+    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedItems = new ArrayList<MacroContainer>();
+
+    for (int selectedIndex : selectedIndices) {
+      selectedItems.add(persistedMacros.getElementAt(selectedIndex));
+    }
+
+    return selectedItems;
   }
 }

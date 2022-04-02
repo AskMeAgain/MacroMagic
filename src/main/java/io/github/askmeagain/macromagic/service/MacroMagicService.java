@@ -1,15 +1,17 @@
 package io.github.askmeagain.macromagic.service;
 
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
+import io.github.askmeagain.macromagic.entities.MacroContainer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -20,6 +22,7 @@ public final class MacroMagicService {
   }
 
   private final MacroMagicPersistingService persistingUtils = MacroMagicPersistingService.getInstance();
+  private final HelperService helperService = HelperService.getInstance();
 
   @Getter
   private boolean running = true;
@@ -28,7 +31,7 @@ public final class MacroMagicService {
   @Getter
   private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
 
-  public void createMacro(String name) {
+  public void persistMacro(String name) {
     var selectedIndices = anActionJBList.getSelectedIndices();
     var selectedItems = new ArrayList<AnAction>();
 
@@ -39,16 +42,19 @@ public final class MacroMagicService {
     persistingUtils.persistActions(selectedItems, name);
   }
 
+  public void loadMacros(List<MacroContainer> macroContainers){
+    macroContainers.stream()
+        .map(MacroContainer::getActions)
+        .flatMap(Collection::stream)
+        .map(helperService::deserializeAction)
+        .forEach(this::addAction);
+  }
+
   public void addAction(AnAction action) {
     if (actionHistory.size() == 30) {
       actionHistory.removeElementAt(0);
     }
     actionHistory.addElement(action);
-  }
-
-  public static MacroMagicService getInstance() {
-    return ApplicationManager.getApplication()
-        .getService(MacroMagicService.class);
   }
 
   public void clearHistory() {
@@ -105,4 +111,8 @@ public final class MacroMagicService {
     return running;
   }
 
+  public static MacroMagicService getInstance() {
+    return ApplicationManager.getApplication()
+        .getService(MacroMagicService.class);
+  }
 }
