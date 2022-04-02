@@ -22,15 +22,19 @@ public class ActionRecorderListener implements AnActionListener {
 
   @Override
   public void beforeEditorTyping(char c, @NotNull DataContext dataContext) {
-    log.info(String.valueOf(c));
-    macroMagicService.addAction(new PressKeyAction(c));
+    if (macroMagicService.isRunning()) {
+      log.info(String.valueOf(c));
+      macroMagicService.addAction(new PressKeyAction(c));
+    }
   }
 
   @Override
   public void beforeActionPerformed(@NotNull AnAction action, @NotNull AnActionEvent event) {
-    if (!(action instanceof MacroMagicInternal)) {
-      log.info(action.getTemplateText());
-      macroMagicService.addAction(action);
+    if (macroMagicService.isRunning()) {
+      if (!(action instanceof MacroMagicInternal)) {
+        log.info(action.getTemplateText());
+        macroMagicService.addAction(action);
+      }
     }
   }
 }

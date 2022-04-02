@@ -22,6 +22,8 @@ public final class MacroMagicService {
   private final MacroMagicPersistingService persistingUtils = MacroMagicPersistingService.getInstance();
 
   @Getter
+  private boolean running = true;
+  @Getter
   private final JBList<AnAction> anActionJBList;
   @Getter
   private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
@@ -72,18 +74,40 @@ public final class MacroMagicService {
   public void moveSelectionUp() {
     var selectedIndices = anActionJBList.getSelectedIndices();
 
-    for (int selectedIndex : selectedIndices) {
-      var action = actionHistory.remove(selectedIndex);
-      actionHistory.insertElementAt(action, selectedIndex + 1);
+    if (selectedIndices[0] == 0) {
+      return;
     }
+
+    for (int i = 0; i < selectedIndices.length; i++) {
+      int selectedIndex = selectedIndices[i];
+      var action = actionHistory.remove(selectedIndex);
+      actionHistory.insertElementAt(action, selectedIndex - 1);
+      selectedIndices[i]--;
+    }
+
+    anActionJBList.setSelectedIndices(selectedIndices);
   }
 
   public void moveSelectionDown() {
     var selectedIndices = anActionJBList.getSelectedIndices();
 
-    for (int selectedIndex : selectedIndices) {
-      var action = actionHistory.remove(selectedIndex);
-      actionHistory.insertElementAt(action, selectedIndex - 1);
+    var lastSelectedIndex = selectedIndices[selectedIndices.length - 1];
+    if (lastSelectedIndex == actionHistory.size() - 1) {
+      return;
     }
+
+    for (int i = selectedIndices.length - 1; i >= 0; i--) {
+      var action = actionHistory.remove(selectedIndices[i]);
+      actionHistory.insertElementAt(action, selectedIndices[i] + 1);
+      selectedIndices[i]++;
+    }
+
+    anActionJBList.setSelectedIndices(selectedIndices);
   }
+
+  public Boolean startStopRecording() {
+    running = !running;
+    return running;
+  }
+
 }

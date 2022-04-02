@@ -48,7 +48,8 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
         new RemoveEntryFromHistoryButton(macroMagicService),
         new ClearHistoryButton(macroMagicService),
         new MoveActionUpButton(macroMagicService),
-        new MoveActionDownButton(macroMagicService)
+        new MoveActionDownButton(macroMagicService),
+        new StartStopRecordingButton(macroMagicService)
     );
 
     var jList = macroMagicService.getAnActionJBList();
