@@ -7,7 +7,7 @@ import io.github.askmeagain.macromagic.service.MacroManagementService;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-public class LoadMacroToHistoryAction extends AnAction implements MacroMagicInternal {
+public class ExtractMacroToHistoryAction extends AnAction implements MacroMagicInternal {
 
   @Getter(lazy = true)
   private final MacroManagementService macroManagementService = MacroManagementService.getInstance();

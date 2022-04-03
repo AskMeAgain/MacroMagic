@@ -4,16 +4,15 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
-import io.github.askmeagain.macromagic.actions.internal.LoadMacroToHistoryAction;
-import io.github.askmeagain.macromagic.service.MacroManagementService;
-import io.github.askmeagain.macromagic.service.HistoryManagementService;
+import io.github.askmeagain.macromagic.actions.internal.ExtractMacroToHistoryAction;
+import io.github.askmeagain.macromagic.actions.internal.ImportMacroToHistoryAction;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
-public class LoadMacroToHistoryButton extends ActionButton {
-  public LoadMacroToHistoryButton() {
+public class ImportMacroToHistoryButton extends ActionButton {
+  public ImportMacroToHistoryButton() {
     super(
-        new LoadMacroToHistoryAction(),
-        ToolUtils.getPresentation(AllIcons.Vcs.Branch),
+        new ImportMacroToHistoryAction(),
+        ToolUtils.getPresentation(AllIcons.Actions.Upload, "Import MacroAction To History"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

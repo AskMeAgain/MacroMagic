@@ -12,7 +12,7 @@ public class MoveActionUpButton extends ActionButton {
   public MoveActionUpButton() {
     super(
         new MoveActionUpAction(),
-        ToolUtils.getPresentation(AllIcons.Actions.MoveUp),
+        ToolUtils.getPresentation(AllIcons.Actions.MoveUp, "Move Select Actions Up"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

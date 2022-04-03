@@ -11,7 +11,7 @@ public class StartStopRecordingButton extends ActionButton {
   public StartStopRecordingButton() {
     super(
         new StartStopRecordingAction(),
-        ToolUtils.getPresentation(StartStopRecordingAction.STOP),
+        ToolUtils.getPresentation(StartStopRecordingAction.STOP, "Stop Recording"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

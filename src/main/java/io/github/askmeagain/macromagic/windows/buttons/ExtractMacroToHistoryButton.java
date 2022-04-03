@@ -4,15 +4,14 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
-import io.github.askmeagain.macromagic.actions.internal.DeleteMacroAction;
-import io.github.askmeagain.macromagic.service.MacroManagementService;
+import io.github.askmeagain.macromagic.actions.internal.ExtractMacroToHistoryAction;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
-public class DeleteMacroButton extends ActionButton {
-  public DeleteMacroButton() {
+public class ExtractMacroToHistoryButton extends ActionButton {
+  public ExtractMacroToHistoryButton() {
     super(
-        new DeleteMacroAction(),
-        ToolUtils.getPresentation(AllIcons.Actions.GC, "Delete Macro"),
+        new ExtractMacroToHistoryAction(),
+        ToolUtils.getPresentation(AllIcons.Vcs.Branch, "Extract Macro To History"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

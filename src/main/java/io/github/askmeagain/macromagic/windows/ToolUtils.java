@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class ToolUtils {
 
-  public static Presentation getPresentation(Icon icon) {
-    var presentation = new Presentation(icon.toString());
+  public static Presentation getPresentation(Icon icon, String hoverText) {
+    var presentation = new Presentation(hoverText);
     presentation.setIcon(icon);
     return presentation;
   }

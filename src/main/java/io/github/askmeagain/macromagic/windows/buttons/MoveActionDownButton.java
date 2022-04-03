@@ -12,7 +12,7 @@ public class MoveActionDownButton extends ActionButton {
   public MoveActionDownButton() {
     super(
         new MoveActionDownAction(),
-        ToolUtils.getPresentation(AllIcons.Actions.MoveDown),
+        ToolUtils.getPresentation(AllIcons.Actions.MoveDown, "Move Selected Actions Down"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

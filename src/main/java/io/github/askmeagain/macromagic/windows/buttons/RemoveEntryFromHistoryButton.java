@@ -12,7 +12,7 @@ public class RemoveEntryFromHistoryButton extends ActionButton {
   public RemoveEntryFromHistoryButton() {
     super(
         new RemoveEntryFromHistoryAction(),
-        ToolUtils.getPresentation(AllIcons.General.Remove),
+        ToolUtils.getPresentation(AllIcons.General.Remove, "Remove Select Actions"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

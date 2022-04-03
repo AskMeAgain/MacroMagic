@@ -73,7 +73,9 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
         MINIMUM_SIZE.height + 40,
         new RunMacroButton(),
         new CombineMacroButton(),
-        new LoadMacroToHistoryButton(),
+        new ExtractMacroToHistoryButton(),
+        new ImportMacroToHistoryButton(),
+        new RegisterShortcutButton(),
         new DeleteMacroButton()
     );
 

@@ -12,7 +12,7 @@ public class CombineMacroButton extends ActionButton {
   public CombineMacroButton() {
     super(
         new CombineMacroAction(),
-        ToolUtils.getPresentation(AllIcons.Vcs.Merge),
+        ToolUtils.getPresentation(AllIcons.Vcs.Merge, "Combine Selected Macros"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

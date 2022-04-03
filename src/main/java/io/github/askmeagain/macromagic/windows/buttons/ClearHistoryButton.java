@@ -12,7 +12,7 @@ public class ClearHistoryButton extends ActionButton {
   public ClearHistoryButton() {
     super(
         new ClearHistoryAction(),
-        ToolUtils.getPresentation(AllIcons.Actions.GC),
+        ToolUtils.getPresentation(AllIcons.Actions.GC, "Clear History"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

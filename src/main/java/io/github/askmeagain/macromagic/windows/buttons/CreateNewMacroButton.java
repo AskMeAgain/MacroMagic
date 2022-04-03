@@ -12,7 +12,7 @@ public class CreateNewMacroButton extends ActionButton {
   public CreateNewMacroButton() {
     super(
         new CreateNewMacroAction(),
-        ToolUtils.getPresentation(AllIcons.Actions.MenuSaveall),
+        ToolUtils.getPresentation(AllIcons.Actions.MenuSaveall, "Save Macro"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );

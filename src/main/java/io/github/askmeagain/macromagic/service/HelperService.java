@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public final class HelperService {
 
-  private static final String macroActionPrefix = "MacroAction-";
+  public static final String macroActionPrefix = "MacroAction-";
 
   private final PluginId pluginId = PluginId.findId("io.github.askmeagain.macromagic.MacroMagic");
 

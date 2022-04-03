@@ -11,7 +11,7 @@ public class RunMacroButton extends ActionButton {
   public RunMacroButton() {
     super(
         new RunPersistedMacroAction(),
-        ToolUtils.getPresentation(AllIcons.Actions.Execute),
+        ToolUtils.getPresentation(AllIcons.Actions.Execute, "Run Selected Macros"),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
     );
