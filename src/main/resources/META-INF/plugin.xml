@@ -27,7 +27,76 @@
     </projectListeners>
 
     <actions>
+        <group id="io.github.askmeagain.macromagic.group.history"
+               text="History Group"
+               popup="false">
+            <action id="io.github.askmeagain.macromagic.actions.internal.CreateNewMacroAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.CreateNewMacroAction"
+                    text="CreateNewMacroAction"
+                    icon="AllIcons.Actions.MenuSaveall"
+                    description="CreateNewMacroAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.MoveActionUpAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.MoveActionUpAction"
+                    text="MoveActionUpAction"
+                    icon="AllIcons.Actions.MoveDown"
+                    description="MoveActionUpAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.ClearHistoryAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.ClearHistoryAction"
+                    text="ClearHistoryAction"
+                    icon="AllIcons.Actions.GC"
+                    description="ClearHistoryAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.MoveActionDownAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.MoveActionDownAction"
+                    text="MoveActionDownAction"
+                    icon="AllIcons.Actions.MoveDown"
+                    description="MoveActionDownAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.RemoveEntryFromHistoryAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.RemoveEntryFromHistoryAction"
+                    text="RemoveEntryFromHistoryAction"
+                    icon="AllIcons.General.Remove"
+                    description="RemoveEntryFromHistoryAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.StartStopRecordingAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.StartStopRecordingAction"
+                    text="StartStopRecordingAction"
+                    icon="AllIcons.Actions.Suspend"
+                    description="StartStopRecordingAction"/>
+        </group>
+        <group id="io.github.askmeagain.macromagic.group.macros"
+               text="Macro Group"
+               popup="false">
+            <action id="io.github.askmeagain.macromagic.actions.internal.CombineMacroAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.CombineMacroAction"
+                    text="CombineMacroAction"
+                    icon="AllIcons.Vcs.Merge"
+                    description="CombineMacroAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.DeleteMacroAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.DeleteMacroAction"
+                    text="DeleteMacroAction"
+                    icon="AllIcons.Actions.GC"
+                    description="DeleteMacroAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.ExtractMacroToHistoryAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.ExtractMacroToHistoryAction"
+                    text="ExtractMacroToHistoryAction"
+                    icon="AllIcons.Vcs.Branch"
+                    description="ExtractMacroToHistoryAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.ImportMacroToHistoryAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.ImportMacroToHistoryAction"
+                    text="ImportMacroToHistoryAction"
+                    icon="AllIcons.Actions.Upload"
+                    description="ImportMacroToHistoryAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.RegisterShortcutAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.RegisterShortcutAction"
+                    text="RegisterShortcutAction"
+                    icon="AllIcons.General.Settings"
+                    description="RegisterShortcutAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.RunPersistedMacroAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.RunPersistedMacroAction"
+                    text="RunPersistedMacroAction"
+                    icon="AllIcons.Actions.Execute"
+                    description="RunPersistedMacroAction"/>
+        </group>
         <!-- Add your actions here -->
+
         <action id="io.github.askmeagain.macromagic.actions.PressKeyAction"
                 class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
                 description="MacroMagicPersistMacro"/>

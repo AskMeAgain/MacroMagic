@@ -1,25 +1,25 @@
 package io.github.askmeagain.macromagic.windows;
 
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.impl.ActionButton;
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
+import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.ContentFactory;
-import io.github.askmeagain.macromagic.service.MacroManagementService;
 import io.github.askmeagain.macromagic.service.HistoryManagementService;
-import io.github.askmeagain.macromagic.windows.buttons.*;
+import io.github.askmeagain.macromagic.service.MacroManagementService;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.dnd.DropTarget;
 
-public class MacroMagicToolWindow implements ToolWindowFactory {
-
-  public static final Dimension MINIMUM_SIZE = ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE;
+public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
 
   private final HistoryManagementService historyManagementService = HistoryManagementService.getInstance();
   private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
@@ -28,26 +28,32 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
     var contentFactory = ApplicationManager.getApplication().getService(ContentFactory.class);
 
-    var panel = new JPanel();
-    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    var panel = new JPanel(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.BOTH;
+    gbc.weightx = 1;
+    gbc.weighty = 0.5;
 
-    panel.add(createHistoryPanel());
-    panel.add(createStoredMacrosPanel());
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.gridwidth = 1;
+
+    panel.add(createHistoryPanel(), gbc);
+
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    gbc.gridwidth = 1;
+
+    panel.add(createMacroPanel(), gbc);
 
     var content = contentFactory.createContent(panel, "", false);
-    toolWindow.getContentManager().addContent(content);
+    var contentManager = toolWindow.getContentManager();
+
+    contentManager.addContent(content);
   }
 
   private JComponent createHistoryPanel() {
-    var buttonToolBar = createButtonToolBar(
-        MINIMUM_SIZE.height + 20,
-        new CreateNewMacroButton(),
-        new RemoveEntryFromHistoryButton(),
-        new ClearHistoryButton(),
-        new MoveActionUpButton(),
-        new MoveActionDownButton(),
-        new StartStopRecordingButton()
-    );
+    var buttonToolBar = createButtonToolBar("history");
 
     var jList = historyManagementService.getAnActionJBList();
 
@@ -55,54 +61,53 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
 
     jList.setSelectedIndex(0);
 
-    var pane = new JBScrollPane(jList);
-    pane.setSize(1000, 1000);
-
-    var historyPanel = new JPanel();
-
-    historyPanel.setLayout(new BoxLayout(historyPanel, BoxLayout.Y_AXIS));
-    historyPanel.add(ToolUtils.getTitleLabel("History"));
-    historyPanel.add(buttonToolBar);
-    historyPanel.add(pane);
-
-    return historyPanel;
+    return createListPanel(buttonToolBar, jList);
   }
 
-  private JComponent createStoredMacrosPanel() {
-    var buttonToolBar = createButtonToolBar(
-        MINIMUM_SIZE.height + 40,
-        new RunMacroButton(),
-        new CombineMacroButton(),
-        new ExtractMacroToHistoryButton(),
-        new ImportMacroToHistoryButton(),
-        new RegisterShortcutButton(),
-        new DeleteMacroButton()
-    );
+  private JComponent createMacroPanel() {
+    var buttonToolBar = createButtonToolBar("macros");
 
-    var anActionJBList = macroManagementService.getAnActionJBList();
+    var jList = macroManagementService.getAnActionJBList();
+    jList.setDragEnabled(true);
+    jList.setSelectedIndex(0);
+
+    return createListPanel(buttonToolBar, jList);
+  }
+
+  private JComponent createListPanel(JComponent buttonToolBar, JBList<?> anActionJBList) {
     var pane = new JBScrollPane(anActionJBList);
-    pane.setSize(1000, 400);
 
-    var historyPanel = new JPanel();
+    var panel = new JPanel(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    gbc.fill = GridBagConstraints.HORIZONTAL;
+    gbc.weightx = 1;
+    gbc.weighty = 0;
 
-    historyPanel.setLayout(new BoxLayout(historyPanel, BoxLayout.Y_AXIS));
-    historyPanel.add(ToolUtils.getTitleLabel("Available Macros"));
-    historyPanel.add(buttonToolBar);
-    historyPanel.add(pane);
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    gbc.gridwidth = 1;
+    gbc.gridheight = 1;
+    panel.add(buttonToolBar, gbc);
+    gbc.weighty = 1;
 
-    return historyPanel;
+    gbc.gridx = 0;
+    gbc.gridy = 1;
+    gbc.gridheight = 100;
+    gbc.fill = GridBagConstraints.BOTH;
+    panel.add(pane, gbc);
+
+    panel.setPreferredSize(new Dimension(0, 200));
+
+    return panel;
   }
 
-  private JPanel createButtonToolBar(int height, ActionButton... actionButton) {
+  private JComponent createButtonToolBar(String groupName) {
 
-    var buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-    buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, height));
+    var instance = ActionManager.getInstance();
+    var actionGroup = (ActionGroup) instance.getAction("io.github.askmeagain.macromagic.group." + groupName);
+    var toolbar = instance.createActionToolbar(ActionPlaces.EDITOR_TOOLBAR, actionGroup, true);
 
-    for (var button : actionButton) {
-      buttonPanel.add(button);
-    }
-
-    return buttonPanel;
+    return toolbar.getComponent();
   }
 
 }
