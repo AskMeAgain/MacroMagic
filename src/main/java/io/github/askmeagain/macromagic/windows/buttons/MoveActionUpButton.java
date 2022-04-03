@@ -5,13 +5,13 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import io.github.askmeagain.macromagic.actions.internal.MoveActionUpAction;
-import io.github.askmeagain.macromagic.service.MacroMagicHistoryService;
+import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class MoveActionUpButton extends ActionButton {
-  public MoveActionUpButton(MacroMagicHistoryService macroMagicHistoryService) {
+  public MoveActionUpButton(HistoryManagementService historyManagementService) {
     super(
-        new MoveActionUpAction(macroMagicHistoryService),
+        new MoveActionUpAction(historyManagementService),
         ToolUtils.getPresentation(AllIcons.Actions.MoveUp),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

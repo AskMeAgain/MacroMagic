@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public final class MacroManagerService {
+public final class MacroManagementService {
 
   private final HelperService helperService = HelperService.getInstance();
 
@@ -29,10 +29,11 @@ public final class MacroManagerService {
   private final JBList<MacroContainer> anActionJBList;
   private MacroMagicState state = MacroMagicPersistenceService.getInstance().getState();
 
-
-  public MacroManagerService() {
+  public MacroManagementService() {
     persistedMacros.addAll(state.getMacros());
+    state.getMacros().forEach(helperService::registerAction);
     anActionJBList = new JBList<>(persistedMacros);
+    anActionJBList.setDragEnabled(true);
   }
 
   public void persistActions(List<AnAction> actions, String name) {
@@ -90,12 +91,12 @@ public final class MacroManagerService {
 
     selectedItems.stream()
         .map(MacroContainer::getActions)
-        .forEach(actions -> helperService.executeActions(actions, event));
+        .forEach(actions -> helperService.executeActions(actions, this, event));
   }
 
-  public static MacroManagerService getInstance() {
+  public static MacroManagementService getInstance() {
     return ApplicationManager.getApplication()
-        .getService(MacroManagerService.class);
+        .getService(MacroManagementService.class);
   }
 
   public List<MacroContainer> getCurrentSelectedMacros() {
@@ -107,5 +108,16 @@ public final class MacroManagerService {
     }
 
     return selectedItems;
+  }
+
+  public MacroContainer getMacro(String macroName) {
+    for (int i = 0; i < persistedMacros.size(); i++) {
+      var macroContainer = persistedMacros.get(i);
+      if (macroContainer.getMacroName().equals(macroName)) {
+        return macroContainer;
+      }
+    }
+
+    throw new RuntimeException("Not found");
   }
 }

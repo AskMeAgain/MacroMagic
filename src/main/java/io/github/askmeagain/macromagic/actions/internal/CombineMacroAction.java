@@ -2,7 +2,7 @@ package io.github.askmeagain.macromagic.actions.internal;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import io.github.askmeagain.macromagic.service.MacroManagerService;
+import io.github.askmeagain.macromagic.service.MacroManagementService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ import javax.swing.*;
 @RequiredArgsConstructor
 public class CombineMacroAction extends AnAction implements MacroMagicInternal {
 
-  private final MacroManagerService macroManagerService;
+  private final MacroManagementService macroManagementService;
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
@@ -25,7 +25,7 @@ public class CombineMacroAction extends AnAction implements MacroMagicInternal {
     );
 
     if (name != null) {
-      macroManagerService.combineSelected(name);
+      macroManagementService.combineSelected(name);
     }
   }
 }

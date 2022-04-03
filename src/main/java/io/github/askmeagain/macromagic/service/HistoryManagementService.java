@@ -4,24 +4,28 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
+import io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Slf4j
 @Service
-public final class MacroMagicHistoryService {
+public final class HistoryManagementService implements DropTargetListener {
 
-  public MacroMagicHistoryService() {
+  public HistoryManagementService() {
     anActionJBList = new JBList<>(actionHistory);
   }
 
-  private final MacroManagerService persistingUtils = MacroManagerService.getInstance();
+  private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
   private final HelperService helperService = HelperService.getInstance();
 
   @Getter
@@ -39,14 +43,14 @@ public final class MacroMagicHistoryService {
       selectedItems.add(actionHistory.getElementAt(selectedIndex));
     }
 
-    persistingUtils.persistActions(selectedItems, name);
+    macroManagementService.persistActions(selectedItems, name);
   }
 
-  public void loadMacros(List<MacroContainer> macroContainers){
+  public void loadMacros(List<MacroContainer> macroContainers) {
     macroContainers.stream()
         .map(MacroContainer::getActions)
         .flatMap(Collection::stream)
-        .map(helperService::deserializeAction)
+        .map(persistedActionDto -> helperService.deserializeAction(persistedActionDto, macroManagementService))
         .forEach(this::addAction);
   }
 
@@ -111,8 +115,53 @@ public final class MacroMagicHistoryService {
     return running;
   }
 
-  public static MacroMagicHistoryService getInstance() {
+  public static HistoryManagementService getInstance() {
     return ApplicationManager.getApplication()
-        .getService(MacroMagicHistoryService.class);
+        .getService(HistoryManagementService.class);
+  }
+
+  @Override
+  public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
+
+  }
+
+  @Override
+  public void dragOver(DropTargetDragEvent dropTargetDragEvent) {
+
+  }
+
+  @Override
+  public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent) {
+
+  }
+
+  @Override
+  public void dragExit(DropTargetEvent dropTargetEvent) {
+
+  }
+
+  @Override
+  public void drop(DropTargetDropEvent e) {
+    try {
+      var tr = e.getTransferable();
+
+      if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+        e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+        var macroName = (String) tr.getTransferData(DataFlavor.stringFlavor);
+        var macroContainer = macroManagementService.getMacro(macroName);
+
+        actionHistory.addElement(helperService.createMacroAction(macroContainer));
+
+        e.getDropTargetContext().dropComplete(true);
+      } else {
+        System.err.println("DataFlavor.stringFlavor is not supported, rejected");
+        e.rejectDrop();
+      }
+    } catch (Exception ex) {
+      System.err.println("UnsupportedFlavorException");
+      ex.printStackTrace();
+      e.rejectDrop();
+    }
+
   }
 }

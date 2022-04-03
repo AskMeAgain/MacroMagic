@@ -4,17 +4,32 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.service.HelperService;
-import lombok.RequiredArgsConstructor;
+import io.github.askmeagain.macromagic.service.MacroManagementService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class ExecuteMacroAction extends AnAction {
 
-  private final MacroContainer macroContainer;
+  @Getter
+  @Setter
+  private MacroContainer macroContainer;
+
+  @Getter(lazy = true)
   private final HelperService helperService = HelperService.getInstance();
+
+  @Getter(lazy = true)
+  private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    helperService.executeActions(macroContainer.getActions(), e);
+    getHelperService().executeActions(macroContainer.getActions(), getMacroManagementService(), e);
+  }
+
+  @Override
+  public String toString() {
+    return macroContainer.getMacroName();
   }
 }

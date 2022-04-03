@@ -5,13 +5,13 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.ActionToolbar;
 import com.intellij.openapi.actionSystem.impl.ActionButton;
 import io.github.askmeagain.macromagic.actions.internal.CreateNewMacroAction;
-import io.github.askmeagain.macromagic.service.MacroMagicHistoryService;
+import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class CreateNewMacroButton extends ActionButton {
-  public CreateNewMacroButton(MacroMagicHistoryService macroMagicHistoryService) {
+  public CreateNewMacroButton(HistoryManagementService historyManagementService) {
     super(
-        new CreateNewMacroAction(macroMagicHistoryService),
+        new CreateNewMacroAction(historyManagementService),
         ToolUtils.getPresentation(AllIcons.Actions.MenuSaveall),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE
