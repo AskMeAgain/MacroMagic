@@ -9,9 +9,9 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class ClearHistoryButton extends ActionButton {
-  public ClearHistoryButton(HistoryManagementService historyManagementService) {
+  public ClearHistoryButton() {
     super(
-        new ClearHistoryAction(historyManagementService),
+        new ClearHistoryAction(),
         ToolUtils.getPresentation(AllIcons.Actions.GC),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

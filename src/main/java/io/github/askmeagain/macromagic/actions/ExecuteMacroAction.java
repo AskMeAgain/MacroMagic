@@ -1,4 +1,4 @@
-package io.github.askmeagain.macromagic.actions.internal;
+package io.github.askmeagain.macromagic.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -25,7 +25,7 @@ public class ExecuteMacroAction extends AnAction {
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    getHelperService().executeActions(macroContainer.getActions(), getMacroManagementService(), e);
+    getHelperService().executeActions(macroContainer.getActions(), e);
   }
 
   @Override

@@ -41,16 +41,17 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   private JComponent createHistoryPanel() {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 20,
-        new CreateNewMacroButton(historyManagementService),
-        new RemoveEntryFromHistoryButton(historyManagementService),
-        new ClearHistoryButton(historyManagementService),
-        new MoveActionUpButton(historyManagementService),
-        new MoveActionDownButton(historyManagementService),
-        new StartStopRecordingButton(historyManagementService)
+        new CreateNewMacroButton(),
+        new RemoveEntryFromHistoryButton(),
+        new ClearHistoryButton(),
+        new MoveActionUpButton(),
+        new MoveActionDownButton(),
+        new StartStopRecordingButton()
     );
 
     var jList = historyManagementService.getAnActionJBList();
-    DropTarget dropTarget = new DropTarget (jList, historyManagementService);
+
+    new DropTarget(jList, historyManagementService);
 
     jList.setSelectedIndex(0);
 
@@ -70,10 +71,10 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   private JComponent createStoredMacrosPanel() {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 40,
-        new RunMacroButton(macroManagementService),
-        new CombineMacroButton(macroManagementService),
-        new LoadMacroToHistoryButton(macroManagementService, historyManagementService),
-        new DeleteMacroButton(macroManagementService)
+        new RunMacroButton(),
+        new CombineMacroButton(),
+        new LoadMacroToHistoryButton(),
+        new DeleteMacroButton()
     );
 
     var anActionJBList = macroManagementService.getAnActionJBList();

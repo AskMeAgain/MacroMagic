@@ -6,8 +6,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.extensions.PluginId;
-import io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction;
-import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
+import io.github.askmeagain.macromagic.actions.ExecuteMacroAction;
+import io.github.askmeagain.macromagic.actions.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.PersistedActionDto;
 
@@ -26,18 +26,14 @@ public final class HelperService {
     return ApplicationManager.getApplication().getService(HelperService.class);
   }
 
-  public AnAction deserializeAction(PersistedActionDto persistedActionDto, MacroManagementService macroManagementService) {
+  public AnAction deserializeAction(PersistedActionDto persistedActionDto) {
     var action = actionManager.getAction(persistedActionDto.getActionId());
 
     if (action instanceof PressKeyAction) {
       var castedAction = (PressKeyAction) action;
       castedAction.setOriginalString(persistedActionDto.getAdditionalInformation());
       return castedAction;
-    }/* else if (action instanceof ExecuteMacroAction) {
-      var castedAction = (ExecuteMacroAction) action;
-      castedAction.setMacroContainer(macroManagerService.getMacro(persistedActionDto.getAdditionalInformation()));
-      return castedAction;
-    } */
+    }
 
     return action;
   }
@@ -46,23 +42,17 @@ public final class HelperService {
     if (anAction instanceof PressKeyAction) {
       var castedAction = (PressKeyAction) anAction;
       return new PersistedActionDto(
-          "io.github.askmeagain.macromagic.actions.internal.PressKeyAction",
+          "io.github.askmeagain.macromagic.actions.PressKeyAction",
           castedAction.getOriginalString()
       );
-    } /*else if (anAction instanceof ExecuteMacroAction) {
-      var castedAction = (ExecuteMacroAction) anAction;
-      return new PersistedActionDto(
-          "io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction",
-          castedAction.getMacroContainer().getMacroName()
-      );
-    } */
+    }
 
     return new PersistedActionDto(actionManager.getId(anAction), null);
   }
 
-  public void executeActions(List<PersistedActionDto> actions, MacroManagementService macroManagementService, AnActionEvent e) {
+  public void executeActions(List<PersistedActionDto> actions, AnActionEvent e) {
     actions.stream()
-        .map(persistedActionDto -> deserializeAction(persistedActionDto, macroManagementService))
+        .map(this::deserializeAction)
         .forEach(x -> x.actionPerformed(e));
   }
 

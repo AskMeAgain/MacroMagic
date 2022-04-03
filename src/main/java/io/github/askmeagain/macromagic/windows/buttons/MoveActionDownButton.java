@@ -9,9 +9,9 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class MoveActionDownButton extends ActionButton {
-  public MoveActionDownButton(HistoryManagementService historyManagementService) {
+  public MoveActionDownButton() {
     super(
-        new MoveActionDownAction(historyManagementService),
+        new MoveActionDownAction(),
         ToolUtils.getPresentation(AllIcons.Actions.MoveDown),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

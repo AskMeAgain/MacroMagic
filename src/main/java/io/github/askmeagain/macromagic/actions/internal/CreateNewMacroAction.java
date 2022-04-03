@@ -3,15 +3,15 @@ package io.github.askmeagain.macromagic.actions.internal;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import io.github.askmeagain.macromagic.service.HistoryManagementService;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
-@RequiredArgsConstructor
 public class CreateNewMacroAction extends AnAction implements MacroMagicInternal {
 
-  private final HistoryManagementService historyManagementService;
+  @Getter(lazy = true)
+  private final HistoryManagementService historyManagementService = HistoryManagementService.getInstance();
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
@@ -26,7 +26,7 @@ public class CreateNewMacroAction extends AnAction implements MacroMagicInternal
     );
 
     if (name != null) {
-      historyManagementService.persistMacro(name);
+      getHistoryManagementService().persistMacro(name);
     }
   }
 }

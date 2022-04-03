@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
 import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
 import io.github.askmeagain.macromagic.service.HistoryManagementService;
-import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
+import io.github.askmeagain.macromagic.actions.PressKeyAction;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 

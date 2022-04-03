@@ -11,10 +11,10 @@ import org.jetbrains.annotations.Nullable;
 
 @Service
 @State(name = "MacroMagicState", storages = @Storage("macromagic.xml"))
-public final class MacroMagicPersistenceService implements PersistentStateComponent<MacroMagicState> {
+public final class PersistenceManagementService implements PersistentStateComponent<MacroMagicState> {
 
-  public static MacroMagicPersistenceService getInstance() {
-    return ApplicationManager.getApplication().getService(MacroMagicPersistenceService.class);
+  public static PersistenceManagementService getInstance() {
+    return ApplicationManager.getApplication().getService(PersistenceManagementService.class);
   }
 
   private MacroMagicState macroMagicState = new MacroMagicState();

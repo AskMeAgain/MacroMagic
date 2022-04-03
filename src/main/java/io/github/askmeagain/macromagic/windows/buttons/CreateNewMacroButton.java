@@ -9,9 +9,9 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class CreateNewMacroButton extends ActionButton {
-  public CreateNewMacroButton(HistoryManagementService historyManagementService) {
+  public CreateNewMacroButton() {
     super(
-        new CreateNewMacroAction(historyManagementService),
+        new CreateNewMacroAction(),
         ToolUtils.getPresentation(AllIcons.Actions.MenuSaveall),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

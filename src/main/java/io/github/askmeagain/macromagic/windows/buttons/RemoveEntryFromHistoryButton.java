@@ -9,9 +9,9 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class RemoveEntryFromHistoryButton extends ActionButton {
-  public RemoveEntryFromHistoryButton(HistoryManagementService historyManagementService) {
+  public RemoveEntryFromHistoryButton() {
     super(
-        new RemoveEntryFromHistoryAction(historyManagementService),
+        new RemoveEntryFromHistoryAction(),
         ToolUtils.getPresentation(AllIcons.General.Remove),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

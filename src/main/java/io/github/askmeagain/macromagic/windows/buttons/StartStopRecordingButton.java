@@ -8,9 +8,9 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class StartStopRecordingButton extends ActionButton {
-  public StartStopRecordingButton(HistoryManagementService historyManagementService) {
+  public StartStopRecordingButton() {
     super(
-        new StartStopRecordingAction(historyManagementService),
+        new StartStopRecordingAction(),
         ToolUtils.getPresentation(StartStopRecordingAction.STOP),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

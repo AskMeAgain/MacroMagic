@@ -28,8 +28,8 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="io.github.askmeagain.macromagic.actions.internal.PressKeyAction"
-                class="io.github.askmeagain.macromagic.actions.internal.PressKeyAction" text="MacroMagicPressKey"
+        <action id="io.github.askmeagain.macromagic.actions.PressKeyAction"
+                class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
                 description="MacroMagicPersistMacro"/>
     </actions>
 </idea-plugin>

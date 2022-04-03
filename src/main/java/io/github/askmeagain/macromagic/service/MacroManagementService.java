@@ -27,7 +27,7 @@ public final class MacroManagementService {
 
   @Getter
   private final JBList<MacroContainer> anActionJBList;
-  private MacroMagicState state = MacroMagicPersistenceService.getInstance().getState();
+  private MacroMagicState state = PersistenceManagementService.getInstance().getState();
 
   public MacroManagementService() {
     persistedMacros.addAll(state.getMacros());
@@ -91,7 +91,7 @@ public final class MacroManagementService {
 
     selectedItems.stream()
         .map(MacroContainer::getActions)
-        .forEach(actions -> helperService.executeActions(actions, this, event));
+        .forEach(actions -> helperService.executeActions(actions, event));
   }
 
   public static MacroManagementService getInstance() {

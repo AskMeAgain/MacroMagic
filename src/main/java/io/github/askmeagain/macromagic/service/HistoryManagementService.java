@@ -4,14 +4,12 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
-import io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
 import java.awt.dnd.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,11 +44,11 @@ public final class HistoryManagementService implements DropTargetListener {
     macroManagementService.persistActions(selectedItems, name);
   }
 
-  public void loadMacros(List<MacroContainer> macroContainers) {
+  public void importMacro(List<MacroContainer> macroContainers) {
     macroContainers.stream()
         .map(MacroContainer::getActions)
         .flatMap(Collection::stream)
-        .map(persistedActionDto -> helperService.deserializeAction(persistedActionDto, macroManagementService))
+        .map(helperService::deserializeAction)
         .forEach(this::addAction);
   }
 

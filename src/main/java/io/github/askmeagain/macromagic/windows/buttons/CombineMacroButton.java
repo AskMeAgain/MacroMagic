@@ -9,9 +9,9 @@ import io.github.askmeagain.macromagic.service.MacroManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class CombineMacroButton extends ActionButton {
-  public CombineMacroButton(MacroManagementService macroManagementService) {
+  public CombineMacroButton() {
     super(
-        new CombineMacroAction(macroManagementService),
+        new CombineMacroAction(),
         ToolUtils.getPresentation(AllIcons.Vcs.Merge),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

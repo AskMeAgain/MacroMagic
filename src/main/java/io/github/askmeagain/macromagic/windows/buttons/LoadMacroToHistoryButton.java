@@ -10,9 +10,9 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class LoadMacroToHistoryButton extends ActionButton {
-  public LoadMacroToHistoryButton(MacroManagementService macroManagementService, HistoryManagementService historyManagementService) {
+  public LoadMacroToHistoryButton() {
     super(
-        new LoadMacroToHistoryAction(macroManagementService, historyManagementService),
+        new LoadMacroToHistoryAction(),
         ToolUtils.getPresentation(AllIcons.Vcs.Branch),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

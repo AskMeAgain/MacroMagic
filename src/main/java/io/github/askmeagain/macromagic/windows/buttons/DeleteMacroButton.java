@@ -9,9 +9,9 @@ import io.github.askmeagain.macromagic.service.MacroManagementService;
 import io.github.askmeagain.macromagic.windows.ToolUtils;
 
 public class DeleteMacroButton extends ActionButton {
-  public DeleteMacroButton(MacroManagementService macroManagementService) {
+  public DeleteMacroButton() {
     super(
-        new DeleteMacroAction(macroManagementService),
+        new DeleteMacroAction(),
         ToolUtils.getPresentation(AllIcons.Actions.GC),
         ActionPlaces.UNKNOWN,
         ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE

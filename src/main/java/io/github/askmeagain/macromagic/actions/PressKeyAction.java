@@ -1,8 +1,9 @@
-package io.github.askmeagain.macromagic.actions.internal;
+package io.github.askmeagain.macromagic.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.components.Service;
+import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
