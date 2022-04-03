@@ -31,7 +31,7 @@ public final class HelperService {
 
     if (action instanceof PressKeyAction) {
       var castedAction = (PressKeyAction) action;
-      castedAction.setKeyCode(persistedActionDto.getAdditionalInformation());
+      castedAction.setOriginalString(persistedActionDto.getAdditionalInformation());
       return castedAction;
     }
 
@@ -41,17 +41,13 @@ public final class HelperService {
   public PersistedActionDto serializeAction(AnAction anAction) {
     if (anAction instanceof PressKeyAction) {
       var castedAction = (PressKeyAction) anAction;
-      return PersistedActionDto.builder()
-          .actionId("io.github.askmeagain.macromagic.actions.internal.PressKeyAction")
-          .isInternal(true)
-          .additionalInformation(castedAction.getOriginalChar())
-          .build();
+      return new PersistedActionDto(
+          "io.github.askmeagain.macromagic.actions.internal.PressKeyAction",
+          castedAction.getOriginalString()
+      );
     }
 
-    return PersistedActionDto.builder()
-        .isInternal(false)
-        .actionId(actionManager.getId(anAction))
-        .build();
+    return new PersistedActionDto(actionManager.getId(anAction), null);
   }
 
   public void executeActions(List<PersistedActionDto> actions, AnActionEvent e) {

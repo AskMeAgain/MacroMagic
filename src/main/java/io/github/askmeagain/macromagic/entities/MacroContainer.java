@@ -1,16 +1,19 @@
 package io.github.askmeagain.macromagic.entities;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Value
-@Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MacroContainer {
 
-  String macroName;
-  List<PersistedActionDto> actions;
+  private String macroName;
+  private List<PersistedActionDto> actions = new ArrayList<>();
 
   @Override
   public String toString() {

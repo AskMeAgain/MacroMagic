@@ -15,13 +15,13 @@ import java.util.List;
 
 @Slf4j
 @Service
-public final class MacroMagicService {
+public final class MacroMagicHistoryService {
 
-  public MacroMagicService() {
+  public MacroMagicHistoryService() {
     anActionJBList = new JBList<>(actionHistory);
   }
 
-  private final MacroMagicPersistingService persistingUtils = MacroMagicPersistingService.getInstance();
+  private final MacroManagerService persistingUtils = MacroManagerService.getInstance();
   private final HelperService helperService = HelperService.getInstance();
 
   @Getter
@@ -111,8 +111,8 @@ public final class MacroMagicService {
     return running;
   }
 
-  public static MacroMagicService getInstance() {
+  public static MacroMagicHistoryService getInstance() {
     return ApplicationManager.getApplication()
-        .getService(MacroMagicService.class);
+        .getService(MacroMagicHistoryService.class);
   }
 }

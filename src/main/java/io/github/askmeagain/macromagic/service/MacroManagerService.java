@@ -1,14 +1,12 @@
 package io.github.askmeagain.macromagic.service;
 
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
-import com.intellij.openapi.extensions.PluginId;
 import com.intellij.ui.components.JBList;
-import io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
+import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public final class MacroMagicPersistingService {
+public final class MacroManagerService {
 
   private final HelperService helperService = HelperService.getInstance();
 
@@ -29,8 +27,11 @@ public final class MacroMagicPersistingService {
 
   @Getter
   private final JBList<MacroContainer> anActionJBList;
+  private MacroMagicState state = MacroMagicPersistenceService.getInstance().getState();
 
-  public MacroMagicPersistingService() {
+
+  public MacroManagerService() {
+    persistedMacros.addAll(state.getMacros());
     anActionJBList = new JBList<>(persistedMacros);
   }
 
@@ -40,12 +41,11 @@ public final class MacroMagicPersistingService {
         .collect(Collectors.toList());
 
     log.info("'{}' got persisted: {}", name, result);
-    var macroContainer = MacroContainer.builder()
-        .macroName(name)
-        .actions(result)
-        .build();
+    var macroContainer = new MacroContainer(name, result);
+
     persistedMacros.addElement(macroContainer);
     helperService.registerAction(macroContainer);
+    state.getMacros().add(macroContainer);
   }
 
   public void deleteSelected() {
@@ -59,6 +59,7 @@ public final class MacroMagicPersistingService {
     }
 
     selectedItems.forEach(persistedMacros::removeElement);
+    selectedItems.forEach(x -> state.getMacros().remove(x));
   }
 
   public void combineSelected(String name) {
@@ -66,16 +67,17 @@ public final class MacroMagicPersistingService {
 
     selectedItems.forEach(persistedMacros::removeElement);
 
-    var macroContainer = MacroContainer.builder()
-        .macroName(name)
-        .actions(selectedItems.stream()
+    var macroContainer = new MacroContainer(
+        name,
+        selectedItems.stream()
             .map(MacroContainer::getActions)
             .flatMap(Collection::stream)
-            .collect(Collectors.toList()))
-        .build();
+            .collect(Collectors.toList())
+    );
 
     persistedMacros.addElement(macroContainer);
     helperService.registerAction(macroContainer);
+    state.getMacros().add(macroContainer);
   }
 
   public void runSelected(AnActionEvent event) {
@@ -91,9 +93,9 @@ public final class MacroMagicPersistingService {
         .forEach(actions -> helperService.executeActions(actions, event));
   }
 
-  public static MacroMagicPersistingService getInstance() {
+  public static MacroManagerService getInstance() {
     return ApplicationManager.getApplication()
-        .getService(MacroMagicPersistingService.class);
+        .getService(MacroManagerService.class);
   }
 
   public List<MacroContainer> getCurrentSelectedMacros() {

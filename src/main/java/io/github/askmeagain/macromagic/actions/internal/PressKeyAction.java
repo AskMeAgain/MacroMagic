@@ -2,8 +2,12 @@ package io.github.askmeagain.macromagic.actions.internal;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.components.Service;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.apache.velocity.runtime.directive.Foreach;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -12,14 +16,13 @@ import java.awt.event.KeyEvent;
 public class PressKeyAction extends AnAction implements MacroMagicInternal {
 
   @Getter
-  private int extendedKeyCodeForChar;
-  @Getter
-  private char originalChar;
+  @Setter
+  private String originalString;
   private Robot robot;
 
-  public PressKeyAction(char c) {
+  public PressKeyAction(String s) {
     this();
-    setKeyCode(c);
+    originalString = s;
   }
 
   public PressKeyAction() {
@@ -30,19 +33,17 @@ public class PressKeyAction extends AnAction implements MacroMagicInternal {
     }
   }
 
-  public void setKeyCode(char c) {
-    extendedKeyCodeForChar = KeyEvent.getExtendedKeyCodeForChar(c);
-    originalChar = c;
-  }
-
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    robot.keyPress(extendedKeyCodeForChar);
-    robot.keyRelease(extendedKeyCodeForChar);
+    for (var c : originalString.toCharArray()) {
+      var extendedKeyCodeForChar = KeyEvent.getExtendedKeyCodeForChar(c);
+      robot.keyPress(extendedKeyCodeForChar);
+      robot.keyRelease(extendedKeyCodeForChar);
+    }
   }
 
   @Override
   public String toString() {
-    return "Press Key(" + originalChar + ")";
+    return "Press Key(" + originalString + ")";
   }
 }

@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PersistedActionDto {
+public class MacroMagicState {
 
-  private String actionId;
-  private String additionalInformation;
+  List<MacroContainer> macros = new ArrayList<>();
 
 }

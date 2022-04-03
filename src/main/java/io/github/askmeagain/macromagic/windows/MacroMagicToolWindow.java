@@ -8,8 +8,8 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.ContentFactory;
-import io.github.askmeagain.macromagic.service.MacroMagicPersistingService;
-import io.github.askmeagain.macromagic.service.MacroMagicService;
+import io.github.askmeagain.macromagic.service.MacroManagerService;
+import io.github.askmeagain.macromagic.service.MacroMagicHistoryService;
 import io.github.askmeagain.macromagic.windows.buttons.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +20,8 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
 
   public static final Dimension MINIMUM_SIZE = ActionToolbar.DEFAULT_MINIMUM_BUTTON_SIZE;
 
-  private final MacroMagicService macroMagicService = MacroMagicService.getInstance();
-  private final MacroMagicPersistingService macroMagicPersistingService = MacroMagicPersistingService.getInstance();
+  private final MacroMagicHistoryService macroMagicHistoryService = MacroMagicHistoryService.getInstance();
+  private final MacroManagerService macroManagerService = MacroManagerService.getInstance();
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
@@ -40,15 +40,15 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   private JComponent createHistoryPanel() {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 20,
-        new CreateNewMacroButton(macroMagicService),
-        new RemoveEntryFromHistoryButton(macroMagicService),
-        new ClearHistoryButton(macroMagicService),
-        new MoveActionUpButton(macroMagicService),
-        new MoveActionDownButton(macroMagicService),
-        new StartStopRecordingButton(macroMagicService)
+        new CreateNewMacroButton(macroMagicHistoryService),
+        new RemoveEntryFromHistoryButton(macroMagicHistoryService),
+        new ClearHistoryButton(macroMagicHistoryService),
+        new MoveActionUpButton(macroMagicHistoryService),
+        new MoveActionDownButton(macroMagicHistoryService),
+        new StartStopRecordingButton(macroMagicHistoryService)
     );
 
-    var jList = macroMagicService.getAnActionJBList();
+    var jList = macroMagicHistoryService.getAnActionJBList();
     jList.setSelectedIndex(0);
 
     var pane = new JBScrollPane(jList);
@@ -67,13 +67,13 @@ public class MacroMagicToolWindow implements ToolWindowFactory {
   private JComponent createStoredMacrosPanel() {
     var buttonToolBar = createButtonToolBar(
         MINIMUM_SIZE.height + 40,
-        new DeleteMacroButton(macroMagicPersistingService),
-        new RunMacroButton(macroMagicPersistingService),
-        new CombineMacroButton(macroMagicPersistingService),
-        new LoadMacroToHistoryButton(macroMagicPersistingService, macroMagicService)
+        new DeleteMacroButton(macroManagerService),
+        new RunMacroButton(macroManagerService),
+        new CombineMacroButton(macroManagerService),
+        new LoadMacroToHistoryButton(macroManagerService, macroMagicHistoryService)
     );
 
-    var pane = new JBScrollPane(macroMagicPersistingService.getAnActionJBList());
+    var pane = new JBScrollPane(macroManagerService.getAnActionJBList());
     pane.setSize(1000, 400);
 
     var historyPanel = new JPanel();
