@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'io.github.askmeagain'
-version System.getenv("RELEASE_VERSION")
+version '0.0.1'
 
 repositories {
     mavenCentral()

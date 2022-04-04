@@ -1,15 +1,14 @@
 <idea-plugin>
     <id>io.github.askmeagain.macromagic.MacroMagic</id>
     <name>MacroMagic</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="20632124+AskMeAgain@users.noreply.github.com" url="https://github.com/AskMeAgain">AskMeAgain</vendor>
 
     <description><![CDATA[
     Enter short description for your plugin here.<br>
     <em>most HTML tags may be used</em>
     ]]></description>
 
-    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
-         on how to target different products -->
+    <version>0.0.1</version>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
