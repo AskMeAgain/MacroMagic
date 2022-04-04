@@ -3,8 +3,8 @@ plugins {
     id 'java'
 }
 
-group 'io.github.askmeagain.macromagic'
-version '0.0.1'
+group 'io.github.askmeagain'
+version System.getenv("RELEASE_VERSION")
 
 repositories {
     mavenCentral()
@@ -20,15 +20,34 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:${logback_classic_version}"
 }
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
+
 intellij {
     version = '2021.3.1'
 }
+
 patchPluginXml {
-    changeNotes = """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    version = project.getVersion()
+    changeNotes = new File("marketplace-changenotes.html").text
+    pluginDescription = new File("marketplace-description.html").text
 }
+
 test {
     useJUnitPlatform()
+}
+
+signPlugin {
+    certificateChain = System.getenv("CERTIFICATE_CHAIN")
+    privateKey = System.getenv("PRIVATE_KEY")
+    password = System.getenv("PRIVATE_KEY_PASSWORD")
+}
+
+publishPlugin {
+    token = System.getenv("PUBLISH_TOKEN")
+    channels = ['unstable']
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
 }
