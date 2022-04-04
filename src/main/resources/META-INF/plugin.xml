@@ -94,7 +94,6 @@
                     icon="AllIcons.Actions.Execute"
                     description="RunPersistedMacroAction"/>
         </group>
-        <!-- Add your actions here -->
 
         <action id="io.github.askmeagain.macromagic.actions.PressKeyAction"
                 class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
