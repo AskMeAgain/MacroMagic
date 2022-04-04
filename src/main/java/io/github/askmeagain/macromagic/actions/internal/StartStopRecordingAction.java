@@ -5,10 +5,9 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 public class StartStopRecordingAction extends AnAction implements MacroMagicInternal {
 

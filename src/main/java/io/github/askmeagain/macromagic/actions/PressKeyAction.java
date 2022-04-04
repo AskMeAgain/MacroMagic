@@ -2,16 +2,13 @@ package io.github.askmeagain.macromagic.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.components.Service;
 import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.velocity.runtime.directive.Foreach;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
+import java.awt.AWTException;
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
 public class PressKeyAction extends AnAction implements MacroMagicInternal {

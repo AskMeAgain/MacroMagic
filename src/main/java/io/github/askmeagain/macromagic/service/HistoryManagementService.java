@@ -8,9 +8,13 @@ import io.github.askmeagain.macromagic.entities.MacroContainer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.dnd.*;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.awt.dnd.DropTargetEvent;
+import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -19,22 +23,24 @@ import java.util.List;
 @Service
 public final class HistoryManagementService implements DropTargetListener {
 
-  public HistoryManagementService() {
-    anActionJBList = new JBList<>(actionHistory);
-  }
+  @Getter
+  private final JBList<AnAction> anActionJbList;
 
   private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
   private final HelperService helperService = HelperService.getInstance();
 
   @Getter
   private boolean running = true;
-  @Getter
-  private final JBList<AnAction> anActionJBList;
+
+  public HistoryManagementService() {
+    anActionJbList = new JBList<>(actionHistory);
+  }
+
   @Getter
   private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
 
   public void persistMacro(String name) {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
     var selectedItems = new ArrayList<AnAction>();
 
     for (int selectedIndex : selectedIndices) {
@@ -64,7 +70,7 @@ public final class HistoryManagementService implements DropTargetListener {
   }
 
   public void removeSelectedIndices() {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
     var selectedItems = new ArrayList<AnAction>();
 
     for (int selectedIndex : selectedIndices) {
@@ -75,7 +81,7 @@ public final class HistoryManagementService implements DropTargetListener {
   }
 
   public void moveSelectionUp() {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
 
     if (selectedIndices[0] == 0) {
       return;
@@ -88,11 +94,11 @@ public final class HistoryManagementService implements DropTargetListener {
       selectedIndices[i]--;
     }
 
-    anActionJBList.setSelectedIndices(selectedIndices);
+    anActionJbList.setSelectedIndices(selectedIndices);
   }
 
   public void moveSelectionDown() {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
 
     var lastSelectedIndex = selectedIndices[selectedIndices.length - 1];
     if (lastSelectedIndex == actionHistory.size() - 1) {
@@ -105,7 +111,7 @@ public final class HistoryManagementService implements DropTargetListener {
       selectedIndices[i]++;
     }
 
-    anActionJBList.setSelectedIndices(selectedIndices);
+    anActionJbList.setSelectedIndices(selectedIndices);
   }
 
   public Boolean startStopRecording() {

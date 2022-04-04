@@ -2,7 +2,6 @@ package io.github.askmeagain.macromagic.actions.internal;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
 import io.github.askmeagain.macromagic.service.MacroManagementService;
 import lombok.Getter;
@@ -18,7 +17,7 @@ public class RegisterShortcutAction extends AnAction implements MacroMagicIntern
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     var macros = getMacroManagementService().getCurrentSelectedMacros();
-    if(macros.size() > 1){
+    if (macros.size() > 1) {
       return;
     }
 

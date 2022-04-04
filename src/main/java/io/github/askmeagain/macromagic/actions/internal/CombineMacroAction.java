@@ -4,10 +4,9 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import io.github.askmeagain.macromagic.service.MacroManagementService;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class CombineMacroAction extends AnAction implements MacroMagicInternal {
 

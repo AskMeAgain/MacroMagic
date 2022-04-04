@@ -6,7 +6,7 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
+import javax.swing.JOptionPane;
 
 public class CreateNewMacroAction extends AnAction implements MacroMagicInternal {
 

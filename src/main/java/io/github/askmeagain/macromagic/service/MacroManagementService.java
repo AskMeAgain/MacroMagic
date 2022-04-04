@@ -10,7 +10,7 @@ import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.swing.*;
+import javax.swing.DefaultListModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,14 +26,14 @@ public final class MacroManagementService {
   private final DefaultListModel<MacroContainer> persistedMacros = new DefaultListModel<>();
 
   @Getter
-  private final JBList<MacroContainer> anActionJBList;
+  private final JBList<MacroContainer> anActionJbList;
   private MacroMagicState state = PersistenceManagementService.getInstance().getState();
 
   public MacroManagementService() {
     persistedMacros.addAll(state.getMacros());
     state.getMacros().forEach(helperService::registerAction);
-    anActionJBList = new JBList<>(persistedMacros);
-    anActionJBList.setDragEnabled(true);
+    anActionJbList = new JBList<>(persistedMacros);
+    anActionJbList.setDragEnabled(true);
   }
 
   public void persistActions(List<AnAction> actions, String name) {
@@ -50,7 +50,7 @@ public final class MacroManagementService {
   }
 
   public void deleteSelected() {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
     var selectedItems = new ArrayList<MacroContainer>();
 
     for (int selectedIndex : selectedIndices) {
@@ -82,7 +82,7 @@ public final class MacroManagementService {
   }
 
   public void runSelected(AnActionEvent event) {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
     var selectedItems = new ArrayList<MacroContainer>();
 
     for (int selectedIndex : selectedIndices) {
@@ -100,7 +100,7 @@ public final class MacroManagementService {
   }
 
   public List<MacroContainer> getCurrentSelectedMacros() {
-    var selectedIndices = anActionJBList.getSelectedIndices();
+    var selectedIndices = anActionJbList.getSelectedIndices();
     var selectedItems = new ArrayList<MacroContainer>();
 
     for (int selectedIndex : selectedIndices) {

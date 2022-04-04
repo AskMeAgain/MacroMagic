@@ -15,8 +15,11 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.service.MacroManagementService;
 import org.jetbrains.annotations.NotNull;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.dnd.DropTarget;
 
 public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
@@ -26,9 +29,7 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
 
   @Override
   public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-    var contentFactory = ApplicationManager.getApplication().getService(ContentFactory.class);
 
-    var panel = new JPanel(new GridBagLayout());
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.BOTH;
     gbc.weightx = 1;
@@ -38,6 +39,7 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
     gbc.gridy = 0;
     gbc.gridwidth = 1;
 
+    var panel = new JPanel(new GridBagLayout());
     panel.add(createHistoryPanel(), gbc);
 
     gbc.gridx = 0;
@@ -46,7 +48,9 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
 
     panel.add(createMacroPanel(), gbc);
 
-    var content = contentFactory.createContent(panel, "", false);
+    var content = ApplicationManager.getApplication()
+        .getService(ContentFactory.class)
+        .createContent(panel, "", false);
     var contentManager = toolWindow.getContentManager();
 
     contentManager.addContent(content);
@@ -55,7 +59,7 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
   private JComponent createHistoryPanel() {
     var buttonToolBar = createButtonToolBar("history");
 
-    var jList = historyManagementService.getAnActionJBList();
+    var jList = historyManagementService.getAnActionJbList();
 
     new DropTarget(jList, historyManagementService);
 
@@ -67,17 +71,16 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
   private JComponent createMacroPanel() {
     var buttonToolBar = createButtonToolBar("macros");
 
-    var jList = macroManagementService.getAnActionJBList();
+    var jList = macroManagementService.getAnActionJbList();
     jList.setDragEnabled(true);
     jList.setSelectedIndex(0);
 
     return createListPanel(buttonToolBar, jList);
   }
 
-  private JComponent createListPanel(JComponent buttonToolBar, JBList<?> anActionJBList) {
-    var pane = new JBScrollPane(anActionJBList);
+  private JComponent createListPanel(JComponent buttonToolBar, JBList<?> anActionJbList) {
 
-    var panel = new JPanel(new GridBagLayout());
+
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.weightx = 1;
@@ -87,13 +90,17 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
     gbc.gridy = 0;
     gbc.gridwidth = 1;
     gbc.gridheight = 1;
-    panel.add(buttonToolBar, gbc);
-    gbc.weighty = 1;
 
+    var panel = new JPanel(new GridBagLayout());
+    panel.add(buttonToolBar, gbc);
+
+    gbc.weighty = 1;
     gbc.gridx = 0;
     gbc.gridy = 1;
     gbc.gridheight = 100;
     gbc.fill = GridBagConstraints.BOTH;
+
+    var pane = new JBScrollPane(anActionJbList);
     panel.add(pane, gbc);
 
     panel.setPreferredSize(new Dimension(0, 200));
