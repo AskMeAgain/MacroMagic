@@ -104,8 +104,7 @@
                 class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
                 description="MacroMagicPersistMacro"/>
 
-        <group id="io.github.askmeagain.macromagic.actions.groups.DynamicTestGroup"
-               class="io.github.askmeagain.macromagic.actions.groups.DynamicTestGroup"
+        <group id="io.github.askmeagain.macromagic.actions.groups.refactoring"
                text="MacroMagic"
                popup="true">
             <add-to-group group-id="RefactoringMenu" anchor="last"/>
