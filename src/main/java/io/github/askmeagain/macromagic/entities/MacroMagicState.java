@@ -13,5 +13,6 @@ import java.util.List;
 public class MacroMagicState {
 
   List<MacroContainer> macros = new ArrayList<>();
+  Boolean running = false;
 
 }

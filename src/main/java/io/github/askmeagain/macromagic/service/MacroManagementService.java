@@ -44,6 +44,14 @@ public final class MacroManagementService {
     log.info("'{}' got persisted: {}", name, result);
     var macroContainer = new MacroContainer(name, result);
 
+    for (var i = 0; i < persistedMacros.size(); i++) {
+      if (persistedMacros.get(i).getMacroName().equals(name)) {
+        persistedMacros.remove(i);
+        state.getMacros().removeIf(x -> x.getMacroName().equals(name));
+        helperService.unregisterAction(macroContainer);
+      }
+    }
+
     persistedMacros.addElement(macroContainer);
     helperService.registerAction(macroContainer);
     state.getMacros().add(macroContainer);

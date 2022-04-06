@@ -16,12 +16,26 @@ public class StartStopRecordingAction extends AnAction implements MacroMagicInte
 
   public static Icon PLAY = AllIcons.Actions.Resume;
   public static Icon STOP = AllIcons.Actions.Suspend;
+  public static String PLAY_TEXT = "Start recording";
+  public static String STOP_TEXT = "Stop recording";
+
+  public void update(@NotNull AnActionEvent e) {
+    setIcon(e);
+  }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    var isRunning = getHistoryManagementService().startStopRecording();
+    getHistoryManagementService().startStopRecording();
+    setIcon(e);
+  }
 
+  private void setIcon(@NotNull AnActionEvent e) {
+    var isRunning = getHistoryManagementService().isRunning();
     var icon = isRunning ? STOP : PLAY;
-    e.getPresentation().setIcon(icon);
+    var description = isRunning ? STOP_TEXT : PLAY_TEXT;
+    var presentation = e.getPresentation();
+
+    presentation.setIcon(icon);
+    presentation.setText(description);
   }
 }

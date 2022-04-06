@@ -80,8 +80,7 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
 
   private JComponent createListPanel(JComponent buttonToolBar, JBList<?> anActionJbList) {
 
-
-    GridBagConstraints gbc = new GridBagConstraints();
+    var gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.HORIZONTAL;
     gbc.weightx = 1;
     gbc.weighty = 0;

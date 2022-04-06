@@ -49,6 +49,11 @@
                     text="MoveActionDownAction"
                     icon="AllIcons.Actions.MoveDown"
                     description="MoveActionDownAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.DuplicateAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.DuplicateAction"
+                    text="DuplicateAction"
+                    icon="AllIcons.Actions.Copy"
+                    description="DuplicateAction"/>
             <action id="io.github.askmeagain.macromagic.actions.internal.RemoveEntryFromHistoryAction"
                     class="io.github.askmeagain.macromagic.actions.internal.RemoveEntryFromHistoryAction"
                     text="RemoveEntryFromHistoryAction"
@@ -98,5 +103,16 @@
         <action id="io.github.askmeagain.macromagic.actions.PressKeyAction"
                 class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
                 description="MacroMagicPersistMacro"/>
+
+        <group id="io.github.askmeagain.macromagic" text="MacroMagic" popup="true">
+            <action id="io.github.askmeagain.macromagic.actions.PressKeyAction22"
+                    class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
+                    description="MacroMagicPersistMacro"/>
+            <separator/>
+            <action id="io.github.askmeagain.macromagic.actions.PressKeyAction22333"
+                    class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
+                    description="MacroMagicPersistMacro"/>
+            <add-to-group group-id="RefactoringMenu" anchor="last"/>
+        </group>
     </actions>
 </idea-plugin>

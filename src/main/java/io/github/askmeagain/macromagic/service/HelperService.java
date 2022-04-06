@@ -3,6 +3,7 @@ package io.github.askmeagain.macromagic.service;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.extensions.PluginId;
@@ -62,7 +63,11 @@ public final class HelperService {
 
   public void registerAction(MacroContainer macroContainer) {
     var macroAction = new ExecuteMacroAction(macroContainer);
+
+    var macroMagicGroup = (DefaultActionGroup) actionManager.getAction("io.github.askmeagain.macromagic");
     actionManager.registerAction(macroActionPrefix + macroContainer.getMacroName(), macroAction, pluginId);
+    System.out.println("no!!!");
+    macroMagicGroup.addAction(macroAction);
   }
 
   public AnAction createMacroAction(MacroContainer macroContainer) {

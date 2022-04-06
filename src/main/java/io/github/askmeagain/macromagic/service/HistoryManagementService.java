@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
+import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,23 +30,21 @@ public final class HistoryManagementService implements DropTargetListener {
   private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
   private final HelperService helperService = HelperService.getInstance();
 
-  @Getter
-  private boolean running = true;
-
   public HistoryManagementService() {
     anActionJbList = new JBList<>(actionHistory);
+  }
+
+  private MacroMagicState state = PersistenceManagementService.getInstance().getState();
+
+  public boolean isRunning() {
+    return state.getRunning();
   }
 
   @Getter
   private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
 
   public void persistMacro(String name) {
-    var selectedIndices = anActionJbList.getSelectedIndices();
-    var selectedItems = new ArrayList<AnAction>();
-
-    for (int selectedIndex : selectedIndices) {
-      selectedItems.add(actionHistory.getElementAt(selectedIndex));
-    }
+    var selectedItems = anActionJbList.getSelectedValuesList();
 
     macroManagementService.persistActions(selectedItems, name);
   }
@@ -114,9 +113,8 @@ public final class HistoryManagementService implements DropTargetListener {
     anActionJbList.setSelectedIndices(selectedIndices);
   }
 
-  public Boolean startStopRecording() {
-    running = !running;
-    return running;
+  public void startStopRecording() {
+    state.setRunning(!state.getRunning());
   }
 
   public static HistoryManagementService getInstance() {
@@ -167,5 +165,14 @@ public final class HistoryManagementService implements DropTargetListener {
       e.rejectDrop();
     }
 
+  }
+
+  public void duplicateSelected() {
+    var selectedIndices = anActionJbList.getSelectedIndices();
+
+    for (int i = selectedIndices.length - 1; i >= 0; i--) {
+      var selectedIndex = selectedIndices[i];
+      actionHistory.add(selectedIndex + 1, actionHistory.get(selectedIndex));
+    }
   }
 }
