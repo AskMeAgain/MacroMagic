@@ -23,9 +23,12 @@ public class RunPersistedMacroAction extends AnAction implements MacroMagicInter
 
     var context = DataManager.getInstance().getDataContext(editor.getComponent());
 
+//    var project = e.getRequiredData(CommonDataKeys.PROJECT);
+//    var psiFile = FilenameIndex.getFilesByName(project,"PressKeyAction.java", GlobalSearchScope.everythingScope(project));
+//    DataManager.getInstance().saveInDataContext(context, Key.create("psi.File"), psiFile);
+
     var newContext = e.withDataContext(context);
 
-    System.out.println(editor.getCaretModel().getAllCarets().size());
     getMacroManagementService().runSelected(newContext);
   }
 }
