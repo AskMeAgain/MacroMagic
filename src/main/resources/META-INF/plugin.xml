@@ -104,14 +104,10 @@
                 class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
                 description="MacroMagicPersistMacro"/>
 
-        <group id="io.github.askmeagain.macromagic" text="MacroMagic" popup="true">
-            <action id="io.github.askmeagain.macromagic.actions.PressKeyAction22"
-                    class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
-                    description="MacroMagicPersistMacro"/>
-            <separator/>
-            <action id="io.github.askmeagain.macromagic.actions.PressKeyAction22333"
-                    class="io.github.askmeagain.macromagic.actions.PressKeyAction" text="MacroMagicPressKey"
-                    description="MacroMagicPersistMacro"/>
+        <group id="io.github.askmeagain.macromagic.actions.groups.DynamicTestGroup"
+               class="io.github.askmeagain.macromagic.actions.groups.DynamicTestGroup"
+               text="MacroMagic"
+               popup="true">
             <add-to-group group-id="RefactoringMenu" anchor="last"/>
         </group>
     </actions>

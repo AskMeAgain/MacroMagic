@@ -2,7 +2,6 @@ package io.github.askmeagain.macromagic.windows;
 
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
@@ -111,7 +110,7 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
 
     var instance = ActionManager.getInstance();
     var actionGroup = (ActionGroup) instance.getAction("io.github.askmeagain.macromagic.group." + groupName);
-    var toolbar = instance.createActionToolbar(ActionPlaces.EDITOR_TOOLBAR, actionGroup, true);
+    var toolbar = instance.createActionToolbar("macro_magic_group_" + groupName, actionGroup, true);
 
     return toolbar.getComponent();
   }

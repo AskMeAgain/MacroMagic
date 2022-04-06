@@ -3,12 +3,12 @@ package io.github.askmeagain.macromagic.service;
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.extensions.PluginId;
 import io.github.askmeagain.macromagic.actions.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.actions.PressKeyAction;
+import io.github.askmeagain.macromagic.actions.groups.DynamicTestGroup;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.PersistedActionDto;
 
@@ -64,10 +64,9 @@ public final class HelperService {
   public void registerAction(MacroContainer macroContainer) {
     var macroAction = new ExecuteMacroAction(macroContainer);
 
-    var macroMagicGroup = (DefaultActionGroup) actionManager.getAction("io.github.askmeagain.macromagic");
+    var macroMagicGroup = (DynamicTestGroup) actionManager.getAction("io.github.askmeagain.macromagic.actions.groups.DynamicTestGroup");
     actionManager.registerAction(macroActionPrefix + macroContainer.getMacroName(), macroAction, pluginId);
-    System.out.println("no!!!");
-    macroMagicGroup.addAction(macroAction);
+    macroMagicGroup.getActionList().add(macroAction);
   }
 
   public AnAction createMacroAction(MacroContainer macroContainer) {
