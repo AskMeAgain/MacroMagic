@@ -10,6 +10,7 @@
 
     <version>0.0.1</version>
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Macro Magic" secondary="false" icon="AllIcons.General.Modified" anchor="right"
@@ -108,6 +109,17 @@
                text="MacroMagic"
                popup="true">
             <add-to-group group-id="RefactoringMenu" anchor="last"/>
+        </group>
+        <group id="io.github.askmeagain.macromagic.actions.groups.utils"
+               text="MacroMagic Utils"
+               popup="true">
+            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction" text="SelectClass"
+                    description="SelectClass"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectFirstAnnotation"
+                    class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectFirstAnnotation"
+                    text="SelectClass"
+                    description="SelectClass"/>
         </group>
     </actions>
 </idea-plugin>
