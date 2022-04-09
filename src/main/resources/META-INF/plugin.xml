@@ -112,14 +112,22 @@
         </group>
         <group id="io.github.askmeagain.macromagic.actions.groups.utils"
                text="MacroMagic Utils"
+               icon="AllIcons.Modules.Annotation"
                popup="true">
+            <add-to-group group-id="io.github.askmeagain.macromagic.group.history" anchor="last"/>
+
             <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction"
-                    class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction" text="SelectClass"
+                    class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction"
+                    text="SelectClass"
                     description="SelectClass"/>
             <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectFirstAnnotation"
                     class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectFirstAnnotation"
-                    text="SelectClass"
-                    description="SelectClass"/>
+                    text="SelectFirstAnnotation"
+                    description="SelectFirstAnnotation"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.PlaceCursorAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.cursor.PlaceCursorAction"
+                    text="PlaceCursorAction"
+                    description="PlaceCursorAction"/>
         </group>
     </actions>
 </idea-plugin>
