@@ -1,43 +1,37 @@
 package io.github.askmeagain.macromagic.actions;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.command.WriteCommandAction;
 import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
-
-public class PressKeyAction extends AnAction implements MacroMagicInternal {
+@NoArgsConstructor
+public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicInternal {
 
   @Getter
   @Setter
   private String originalString;
-  private Robot robot;
 
   public PressKeyAction(String s) {
-    this();
     originalString = s;
-  }
-
-  public PressKeyAction() {
-    try {
-      robot = new Robot();
-    } catch (AWTException e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    for (var c : originalString.toCharArray()) {
-      var extendedKeyCodeForChar = KeyEvent.getExtendedKeyCodeForChar(c);
-      robot.keyPress(extendedKeyCodeForChar);
-      robot.keyRelease(extendedKeyCodeForChar);
-    }
+    var editor = getEditor(e);
+    var document = editor.getDocument();
+
+    editor.getCaretModel().runForEachCaret(caret -> {
+      var selectionStart = caret.getSelectionStart();
+      var selectionEnd = caret.getSelectionEnd();
+
+      WriteCommandAction.runWriteCommandAction(e.getProject(), () ->
+          document.replaceString(selectionStart, selectionEnd, originalString)
+      );
+    });
   }
 
   @Override

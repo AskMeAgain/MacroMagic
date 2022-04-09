@@ -1,12 +1,19 @@
 package io.github.askmeagain.macromagic.actions;
 
+import com.intellij.ide.DataManager;
+import com.intellij.ide.projectView.ProjectView;
+import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
+import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.editor.CaretState;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorFactory;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiFile;
@@ -17,10 +24,20 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 public abstract class MacroMagicBaseAction extends AnAction {
 
+
+  @Getter(lazy = true, value = AccessLevel.PROTECTED)
+  private final DataManager dataManager = DataManager.getInstance();
+  @Getter(lazy = true, value = AccessLevel.PROTECTED)
+  private final FileDocumentManager fileDocumentManager = FileDocumentManager.getInstance();
+  @Getter(lazy = true, value = AccessLevel.PROTECTED)
+  private final EditorFactory editorFactory = EditorFactory.getInstance();
   @Getter(lazy = true, value = AccessLevel.PROTECTED)
   private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
   @Getter(lazy = true, value = AccessLevel.PROTECTED)
@@ -35,12 +52,12 @@ public abstract class MacroMagicBaseAction extends AnAction {
 
   protected Editor getEditor(@NotNull AnActionEvent e) {
 
-    var windowManager = ToolWindowManager.getInstance(e.getProject());
-
-    if (!windowManager.isEditorComponentActive()) {
-      focusEditor(e);
-      return getSelectedTextEditor(e);
-    }
+//    var windowManager = ToolWindowManager.getInstance(e.getProject());
+//
+//    if (!windowManager.isEditorComponentActive()) {
+////      focusEditor(e);
+//      return getSelectedTextEditor(e);
+//    }
 
     return e.getRequiredData(CommonDataKeys.EDITOR);
   }
@@ -62,5 +79,41 @@ public abstract class MacroMagicBaseAction extends AnAction {
 
     var caretState = new CaretState(caretPosition, caretPosition, selectionEnd);
     editor.getCaretModel().setCaretsAndSelections(List.of(caretState));
+  }
+
+  protected void runActionOnFiles(@NotNull AnActionEvent e, Consumer<AnActionEvent> consumer) {
+    var activeToolWindowId = ToolWindowManager.getInstance(e.getProject()).getActiveToolWindowId();
+
+    var fromFileTree = "Project".equals(activeToolWindowId);
+    var fromMacroMagicToolWindow = "Macro Magic".equals(activeToolWindowId);
+    var fromWithinEditor = e.getData(CommonDataKeys.EDITOR) != null;
+
+    if (fromMacroMagicToolWindow) {
+      var virtualFile = getFileDocumentManager().getFile(getSelectedTextEditor(e).getDocument());
+      executionActionOnVirtualFile(virtualFile, e, consumer);
+    } else if (fromWithinEditor) {
+      consumer.accept(e);
+    } else if (fromFileTree) {
+      runActionOnSelectFiles(e, consumer);
+    }
+  }
+
+  protected void runActionOnSelectFiles(@NotNull AnActionEvent e, Consumer<AnActionEvent> consumer) {
+    var project = e.getProject();
+    Arrays.stream(ProjectView.getInstance(project)
+            .getCurrentProjectViewPane()
+            .getSelectedUserObjects())
+        .map(x -> (PsiFileNode) x)
+        .filter(Objects::nonNull)
+        .map(BasePsiNode::getVirtualFile)
+        .forEach(virtualFile -> executionActionOnVirtualFile(virtualFile, e, consumer));
+  }
+
+  protected void executionActionOnVirtualFile(VirtualFile virtualFile, @NotNull AnActionEvent e, Consumer<AnActionEvent> consumer) {
+    var document = getFileDocumentManager().getDocument(virtualFile);
+    var editor = getEditorFactory().createEditor(document, e.getProject());
+    var context = getDataManager().getDataContext(editor.getContentComponent());
+
+    consumer.accept(e.withDataContext(context));
   }
 }
