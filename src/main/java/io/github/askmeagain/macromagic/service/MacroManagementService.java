@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.DefaultListModel;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 public final class MacroManagementService {
 
+  @Getter(lazy = true)
   private final HelperService helperService = HelperService.getInstance();
 
   @Getter
@@ -30,7 +30,7 @@ public final class MacroManagementService {
   private MacroMagicState state = PersistenceManagementService.getInstance().getState();
 
   public MacroManagementService() {
-    state.getMacros().forEach(helperService::registerAction);
+    state.getMacros().forEach(getHelperService()::registerAction);
     persistedMacros.addAll(state.getMacros());
     anActionJbList = new JBList<>(persistedMacros);
     anActionJbList.setDragEnabled(true);
@@ -38,7 +38,7 @@ public final class MacroManagementService {
 
   public void persistActions(List<AnAction> actions, String name) {
     var result = actions.stream()
-        .map(helperService::serializeAction)
+        .map(getHelperService()::serializeAction)
         .collect(Collectors.toList());
 
     log.info("'{}' got persisted: {}", name, result);
@@ -48,28 +48,22 @@ public final class MacroManagementService {
       if (persistedMacros.get(i).getMacroName().equals(name)) {
         persistedMacros.remove(i);
         state.getMacros().removeIf(x -> x.getMacroName().equals(name));
-        helperService.unregisterAction(macroContainer);
+        getHelperService().unregisterAction(macroContainer);
       }
     }
 
     persistedMacros.addElement(macroContainer);
-    helperService.registerAction(macroContainer);
+    getHelperService().registerAction(macroContainer);
     state.getMacros().add(macroContainer);
     anActionJbList.setSelectedIndex(persistedMacros.size() - 1);
   }
 
   public void deleteSelected() {
-    var selectedIndices = anActionJbList.getSelectedIndices();
-    var selectedItems = new ArrayList<MacroContainer>();
-
-    for (int selectedIndex : selectedIndices) {
-      var removedMacro = persistedMacros.getElementAt(selectedIndex);
-      selectedItems.add(removedMacro);
-      helperService.unregisterAction(removedMacro);
-    }
-
-    selectedItems.forEach(persistedMacros::removeElement);
-    selectedItems.forEach(x -> state.getMacros().remove(x));
+    getCurrentSelectedMacros().forEach(macroContainer -> {
+      persistedMacros.removeElement(macroContainer);
+      state.getMacros().remove(macroContainer);
+      getHelperService().unregisterAction(macroContainer);
+    });
   }
 
   public void combineSelected(String name) {
@@ -86,15 +80,15 @@ public final class MacroManagementService {
     );
 
     persistedMacros.addElement(macroContainer);
-    helperService.registerAction(macroContainer);
+    getHelperService().registerAction(macroContainer);
     state.getMacros().add(macroContainer);
   }
 
-  public void runSelected(AnActionEvent event) {
-    anActionJbList.getSelectedValuesList()
+  public void runSelected(AnActionEvent e) {
+    getCurrentSelectedMacros()
         .stream()
         .map(MacroContainer::getActions)
-        .forEach(actions -> helperService.executeActions(actions, event));
+        .forEach(actions -> getHelperService().executeActions(actions, e));
   }
 
   public static MacroManagementService getInstance() {

@@ -173,6 +173,12 @@ public final class HistoryManagementService implements DropTargetListener {
     for (int i = selectedIndices.length - 1; i >= 0; i--) {
       var selectedIndex = selectedIndices[i];
       actionHistory.add(selectedIndex + 1, actionHistory.get(selectedIndex));
+      selectedIndices[i] += 1;
+      for (int ii = i + 1; ii < selectedIndices.length; ii++) {
+        selectedIndices[ii]++;
+      }
     }
+
+    anActionJbList.setSelectedIndices(selectedIndices);
   }
 }

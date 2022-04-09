@@ -127,14 +127,14 @@
                     class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction"
                     text="SelectClass"
                     description="SelectClass"/>
-            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectFirstAnnotation"
-                    class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectFirstAnnotation"
-                    text="SelectFirstAnnotation"
-                    description="SelectFirstAnnotation"/>
-            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.PlaceCursorAction"
-                    class="io.github.askmeagain.macromagic.actions.internal.cursor.PlaceCursorAction"
-                    text="PlaceCursorAction"
-                    description="PlaceCursorAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectAnnotation"
+                    class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectAnnotation"
+                    text="SelectAnnotation"
+                    description="SelectAnnotation"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.cursor.PlaceCursorAtTopAction"
+                    class="io.github.askmeagain.macromagic.actions.internal.cursor.PlaceCursorAtTopAction"
+                    text="PlaceCursorAtTopAction"
+                    description="PlaceCursorAtTopAction"/>
         </group>
     </actions>
 </idea-plugin>

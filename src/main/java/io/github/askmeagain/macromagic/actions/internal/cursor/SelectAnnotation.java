@@ -6,7 +6,7 @@ import com.intellij.psi.PsiAnnotation;
 import io.github.askmeagain.macromagic.actions.MacroMagicBaseAction;
 import org.jetbrains.annotations.NotNull;
 
-public class SelectFirstAnnotation extends MacroMagicBaseAction {
+public class SelectAnnotation extends MacroMagicBaseAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     getPsiFile(e).accept(new JavaRecursiveElementVisitor() {

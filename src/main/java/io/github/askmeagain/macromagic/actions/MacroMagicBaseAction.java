@@ -12,9 +12,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiFile;
 import io.github.askmeagain.macromagic.service.HelperService;
@@ -52,15 +52,19 @@ public abstract class MacroMagicBaseAction extends AnAction {
   }
 
   protected Editor getEditor(@NotNull AnActionEvent e) {
-    return e.getRequiredData(CommonDataKeys.EDITOR);
+    var data = e.getData(CommonDataKeys.EDITOR);
+
+    if (data == null) {
+      return getSelectedTextEditor(e);
+    }
+
+    return data;
   }
 
   protected void focusEditor(@NotNull AnActionEvent e) {
     var selectedTextEditor = getSelectedTextEditor(e);
-    var virtualFile = getFileDocumentManager().getFile(selectedTextEditor.getDocument());
-    var id = TextEditorProvider.getInstance().getEditorTypeId();
 
-    FileEditorManager.getInstance(e.getProject()).setSelectedEditor(virtualFile, id);
+    IdeFocusManager.getInstance(e.getProject()).requestFocus(selectedTextEditor.getContentComponent(), true);
   }
 
   protected Editor getSelectedTextEditor(@NotNull AnActionEvent e) {
