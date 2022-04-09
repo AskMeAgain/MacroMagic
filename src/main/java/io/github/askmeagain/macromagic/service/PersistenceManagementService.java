@@ -7,7 +7,6 @@ import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @Service
 @State(name = "MacroMagicState", storages = @Storage("macromagic.xml"))
@@ -20,7 +19,7 @@ public final class PersistenceManagementService implements PersistentStateCompon
   private MacroMagicState macroMagicState = new MacroMagicState();
 
   @Override
-  public @Nullable MacroMagicState getState() {
+  public @NotNull MacroMagicState getState() {
     return macroMagicState;
   }
 

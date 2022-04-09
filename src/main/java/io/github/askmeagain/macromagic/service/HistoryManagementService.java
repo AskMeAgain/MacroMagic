@@ -16,7 +16,6 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,57 +25,54 @@ public final class HistoryManagementService implements DropTargetListener {
 
   @Getter
   private final JBList<AnAction> anActionJbList;
+  @Getter
+  private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
 
+  @Getter(lazy = true)
+  private final MacroMagicState state = PersistenceManagementService.getInstance().getState();
+  @Getter(lazy = true)
   private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
+  @Getter(lazy = true)
   private final HelperService helperService = HelperService.getInstance();
 
   public HistoryManagementService() {
     anActionJbList = new JBList<>(actionHistory);
   }
 
-  private MacroMagicState state = PersistenceManagementService.getInstance().getState();
-
-  public boolean isRunning() {
-    return state.getRunning();
+  public static HistoryManagementService getInstance() {
+    return ApplicationManager.getApplication()
+        .getService(HistoryManagementService.class);
   }
 
-  @Getter
-  private final DefaultListModel<AnAction> actionHistory = new DefaultListModel<>();
+  public boolean isRunning() {
+    return getState().getRunning();
+  }
 
   public void persistMacro(String name) {
-    var selectedItems = anActionJbList.getSelectedValuesList();
-
-    macroManagementService.persistActions(selectedItems, name);
+    getMacroManagementService().persistActions(getSelectedValuesList(), name);
   }
 
   public void importMacro(List<MacroContainer> macroContainers) {
     macroContainers.stream()
         .map(MacroContainer::getActions)
         .flatMap(Collection::stream)
-        .map(helperService::deserializeAction)
+        .map(getHelperService()::deserializeAction)
         .forEach(this::addAction);
-  }
-
-  public void addAction(AnAction action) {
-    if (actionHistory.size() == 30) {
-      actionHistory.removeElementAt(0);
-    }
-    actionHistory.addElement(action);
   }
 
   public void clearHistory() {
     actionHistory.clear();
   }
 
-  public void removeSelectedIndices() {
-    var selectedIndices = anActionJbList.getSelectedIndices();
-    var selectedItems = new ArrayList<AnAction>();
-
-    for (int selectedIndex : selectedIndices) {
-      selectedItems.add(actionHistory.getElementAt(selectedIndex));
+  public void addAction(AnAction action) {
+    if (actionHistory.size() == getState().getHistorySize()) {
+      actionHistory.removeElementAt(0);
     }
+    actionHistory.addElement(action);
+  }
 
-    selectedItems.forEach(actionHistory::removeElement);
+  public void removeSelectedIndices() {
+    getSelectedValuesList().forEach(actionHistory::removeElement);
   }
 
   public void moveSelectionUp() {
@@ -113,33 +109,12 @@ public final class HistoryManagementService implements DropTargetListener {
     anActionJbList.setSelectedIndices(selectedIndices);
   }
 
+  private List<AnAction> getSelectedValuesList() {
+    return anActionJbList.getSelectedValuesList();
+  }
+
   public void startStopRecording() {
-    state.setRunning(!state.getRunning());
-  }
-
-  public static HistoryManagementService getInstance() {
-    return ApplicationManager.getApplication()
-        .getService(HistoryManagementService.class);
-  }
-
-  @Override
-  public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
-
-  }
-
-  @Override
-  public void dragOver(DropTargetDragEvent dropTargetDragEvent) {
-
-  }
-
-  @Override
-  public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent) {
-
-  }
-
-  @Override
-  public void dragExit(DropTargetEvent dropTargetEvent) {
-
+    getState().setRunning(!getState().getRunning());
   }
 
   @Override
@@ -150,9 +125,9 @@ public final class HistoryManagementService implements DropTargetListener {
       if (tr.isDataFlavorSupported(DataFlavor.stringFlavor)) {
         e.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
         var macroName = (String) tr.getTransferData(DataFlavor.stringFlavor);
-        var macroContainer = macroManagementService.getMacro(macroName);
+        var macroContainer = getMacroManagementService().getMacro(macroName);
 
-        actionHistory.addElement(helperService.createMacroAction(macroContainer));
+        actionHistory.addElement(getHelperService().createMacroAction(macroContainer));
 
         e.getDropTargetContext().dropComplete(true);
       } else {
@@ -164,7 +139,6 @@ public final class HistoryManagementService implements DropTargetListener {
       ex.printStackTrace();
       e.rejectDrop();
     }
-
   }
 
   public void duplicateSelected() {
@@ -174,11 +148,29 @@ public final class HistoryManagementService implements DropTargetListener {
       var selectedIndex = selectedIndices[i];
       actionHistory.add(selectedIndex + 1, actionHistory.get(selectedIndex));
       selectedIndices[i] += 1;
+
+      //offsetting the indices
       for (int ii = i + 1; ii < selectedIndices.length; ii++) {
         selectedIndices[ii]++;
       }
     }
 
     anActionJbList.setSelectedIndices(selectedIndices);
+  }
+
+  @Override
+  public void dragEnter(DropTargetDragEvent dropTargetDragEvent) {
+  }
+
+  @Override
+  public void dragOver(DropTargetDragEvent dropTargetDragEvent) {
+  }
+
+  @Override
+  public void dropActionChanged(DropTargetDragEvent dropTargetDragEvent) {
+  }
+
+  @Override
+  public void dragExit(DropTargetEvent dropTargetEvent) {
   }
 }

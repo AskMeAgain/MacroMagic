@@ -11,6 +11,7 @@ import io.github.askmeagain.macromagic.actions.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.actions.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.PersistedActionDto;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public final class HelperService {
 
   private final PluginId pluginId = PluginId.findId("io.github.askmeagain.macromagic.MacroMagic");
 
+  @Getter(lazy = true)
   private final ActionManager actionManager = ActionManager.getInstance();
 
   public static HelperService getInstance() {
@@ -28,7 +30,7 @@ public final class HelperService {
   }
 
   public AnAction deserializeAction(PersistedActionDto persistedActionDto) {
-    var action = actionManager.getAction(persistedActionDto.getActionId());
+    var action = getActionManager().getAction(persistedActionDto.getActionId());
 
     if (action instanceof PressKeyAction) {
       var castedAction = (PressKeyAction) action;
@@ -48,7 +50,7 @@ public final class HelperService {
       );
     }
 
-    return new PersistedActionDto(actionManager.getId(anAction), null);
+    return new PersistedActionDto(getActionManager().getId(anAction), null);
   }
 
   public void executeActions(List<PersistedActionDto> actions, AnActionEvent e) {
@@ -58,19 +60,19 @@ public final class HelperService {
   }
 
   public void unregisterAction(MacroContainer removedMacro) {
-    actionManager.unregisterAction(macroActionPrefix + removedMacro.getMacroName());
+    getActionManager().unregisterAction(macroActionPrefix + removedMacro.getMacroName());
   }
 
   public void registerAction(MacroContainer macroContainer) {
     var macroAction = new ExecuteMacroAction(macroContainer);
 
-    var macroMagicGroup = (DefaultActionGroup) actionManager.getAction("io.github.askmeagain.macromagic.actions.groups.refactoring");
-    actionManager.registerAction(macroActionPrefix + macroContainer.getMacroName(), macroAction, pluginId);
+    var macroMagicGroup = (DefaultActionGroup) getActionManager().getAction("io.github.askmeagain.macromagic.actions.groups.refactoring");
+    getActionManager().registerAction(macroActionPrefix + macroContainer.getMacroName(), macroAction, pluginId);
 
     macroMagicGroup.addAction(macroAction);
   }
 
   public AnAction createMacroAction(MacroContainer macroContainer) {
-    return actionManager.getAction(macroActionPrefix + macroContainer.getMacroName());
+    return getActionManager().getAction(macroActionPrefix + macroContainer.getMacroName());
   }
 }

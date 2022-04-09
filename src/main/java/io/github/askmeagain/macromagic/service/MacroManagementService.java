@@ -21,17 +21,17 @@ public final class MacroManagementService {
 
   @Getter(lazy = true)
   private final HelperService helperService = HelperService.getInstance();
-
   @Getter
   private final DefaultListModel<MacroContainer> persistedMacros = new DefaultListModel<>();
-
   @Getter
   private final JBList<MacroContainer> anActionJbList;
-  private MacroMagicState state = PersistenceManagementService.getInstance().getState();
+
+  @Getter(lazy = true)
+  private final MacroMagicState state = PersistenceManagementService.getInstance().getState();
 
   public MacroManagementService() {
-    state.getMacros().forEach(getHelperService()::registerAction);
-    persistedMacros.addAll(state.getMacros());
+    getState().getMacros().forEach(getHelperService()::registerAction);
+    persistedMacros.addAll(getState().getMacros());
     anActionJbList = new JBList<>(persistedMacros);
     anActionJbList.setDragEnabled(true);
   }
@@ -47,21 +47,21 @@ public final class MacroManagementService {
     for (var i = 0; i < persistedMacros.size(); i++) {
       if (persistedMacros.get(i).getMacroName().equals(name)) {
         persistedMacros.remove(i);
-        state.getMacros().removeIf(x -> x.getMacroName().equals(name));
+        getState().getMacros().removeIf(x -> x.getMacroName().equals(name));
         getHelperService().unregisterAction(macroContainer);
       }
     }
 
     persistedMacros.addElement(macroContainer);
     getHelperService().registerAction(macroContainer);
-    state.getMacros().add(macroContainer);
+    getState().getMacros().add(macroContainer);
     anActionJbList.setSelectedIndex(persistedMacros.size() - 1);
   }
 
   public void deleteSelected() {
     getCurrentSelectedMacros().forEach(macroContainer -> {
       persistedMacros.removeElement(macroContainer);
-      state.getMacros().remove(macroContainer);
+      getState().getMacros().remove(macroContainer);
       getHelperService().unregisterAction(macroContainer);
     });
   }
@@ -81,7 +81,7 @@ public final class MacroManagementService {
 
     persistedMacros.addElement(macroContainer);
     getHelperService().registerAction(macroContainer);
-    state.getMacros().add(macroContainer);
+    getState().getMacros().add(macroContainer);
   }
 
   public void runSelected(AnActionEvent e) {
