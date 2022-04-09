@@ -28,8 +28,10 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
       var selectionStart = caret.getSelectionStart();
       var selectionEnd = caret.getSelectionEnd();
 
-      WriteCommandAction.runWriteCommandAction(e.getProject(), () ->
-          document.replaceString(selectionStart, selectionEnd, originalString)
+      WriteCommandAction.runWriteCommandAction(e.getProject(), () -> {
+            document.replaceString(selectionStart, selectionEnd, originalString);
+            caret.moveToOffset(selectionEnd + originalString.length());
+          }
       );
     });
   }

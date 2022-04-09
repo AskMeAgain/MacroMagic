@@ -12,9 +12,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.psi.PsiFile;
 import io.github.askmeagain.macromagic.service.HelperService;
@@ -22,6 +22,7 @@ import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.service.MacroManagementService;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -51,20 +52,15 @@ public abstract class MacroMagicBaseAction extends AnAction {
   }
 
   protected Editor getEditor(@NotNull AnActionEvent e) {
-
-//    var windowManager = ToolWindowManager.getInstance(e.getProject());
-//
-//    if (!windowManager.isEditorComponentActive()) {
-////      focusEditor(e);
-//      return getSelectedTextEditor(e);
-//    }
-
     return e.getRequiredData(CommonDataKeys.EDITOR);
   }
 
   protected void focusEditor(@NotNull AnActionEvent e) {
     var selectedTextEditor = getSelectedTextEditor(e);
-    IdeFocusManager.getInstance(e.getProject()).requestFocus(selectedTextEditor.getContentComponent(), true);
+    var virtualFile = getFileDocumentManager().getFile(selectedTextEditor.getDocument());
+    var id = TextEditorProvider.getInstance().getEditorTypeId();
+
+    FileEditorManager.getInstance(e.getProject()).setSelectedEditor(virtualFile, id);
   }
 
   protected Editor getSelectedTextEditor(@NotNull AnActionEvent e) {
@@ -81,20 +77,21 @@ public abstract class MacroMagicBaseAction extends AnAction {
     editor.getCaretModel().setCaretsAndSelections(List.of(caretState));
   }
 
+  @SneakyThrows
   protected void runActionOnFiles(@NotNull AnActionEvent e, Consumer<AnActionEvent> consumer) {
     var activeToolWindowId = ToolWindowManager.getInstance(e.getProject()).getActiveToolWindowId();
 
     var fromFileTree = "Project".equals(activeToolWindowId);
-    var fromMacroMagicToolWindow = "Macro Magic".equals(activeToolWindowId);
     var fromWithinEditor = e.getData(CommonDataKeys.EDITOR) != null;
 
-    if (fromMacroMagicToolWindow) {
-      var virtualFile = getFileDocumentManager().getFile(getSelectedTextEditor(e).getDocument());
-      executionActionOnVirtualFile(virtualFile, e, consumer);
-    } else if (fromWithinEditor) {
+    if (fromWithinEditor) {
       consumer.accept(e);
     } else if (fromFileTree) {
       runActionOnSelectFiles(e, consumer);
+    } else {
+      focusEditor(e);
+      var virtualFile = getFileDocumentManager().getFile(getSelectedTextEditor(e).getDocument());
+      executionActionOnVirtualFile(virtualFile, e, consumer);
     }
   }
 
@@ -111,8 +108,12 @@ public abstract class MacroMagicBaseAction extends AnAction {
 
   protected void executionActionOnVirtualFile(VirtualFile virtualFile, @NotNull AnActionEvent e, Consumer<AnActionEvent> consumer) {
     var document = getFileDocumentManager().getDocument(virtualFile);
+
     var editor = getEditorFactory().createEditor(document, e.getProject());
     var context = getDataManager().getDataContext(editor.getContentComponent());
+
+    //getDataManager().get(context, Key.create(CommonDataKeys.VIRTUAL_FILE.getName()), virtualFile);
+    //var isNull = context.getData(CommonDataKeys.VIRTUAL_FILE);
 
     consumer.accept(e.withDataContext(context));
   }

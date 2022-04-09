@@ -15,6 +15,11 @@
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Macro Magic" secondary="false" icon="AllIcons.General.Modified" anchor="right"
                     factoryClass="io.github.askmeagain.macromagic.windows.MacroMagicToolWindow"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="io.github.askmeagain.macromagic.windows.AppSettingsConfigurable"
+                id="io.github.askmeagain.macromagic.windows.AppSettingsConfigurable"
+                displayName="My Application Settings"/>
     </extensions>
 
     <applicationListeners>
@@ -114,7 +119,9 @@
                text="MacroMagic Utils"
                icon="AllIcons.Modules.Annotation"
                popup="true">
-            <add-to-group group-id="io.github.askmeagain.macromagic.group.history" anchor="last"/>
+            <add-to-group group-id="io.github.askmeagain.macromagic.group.history"
+                          anchor="before"
+                          relative-to-action="io.github.askmeagain.macromagic.actions.internal.StartStopRecordingAction"/>
 
             <action id="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction"
                     class="io.github.askmeagain.macromagic.actions.internal.cursor.SelectClassAction"

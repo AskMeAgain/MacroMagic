@@ -30,8 +30,8 @@ public final class MacroManagementService {
   private MacroMagicState state = PersistenceManagementService.getInstance().getState();
 
   public MacroManagementService() {
-    persistedMacros.addAll(state.getMacros());
     state.getMacros().forEach(helperService::registerAction);
+    persistedMacros.addAll(state.getMacros());
     anActionJbList = new JBList<>(persistedMacros);
     anActionJbList.setDragEnabled(true);
   }
@@ -55,6 +55,7 @@ public final class MacroManagementService {
     persistedMacros.addElement(macroContainer);
     helperService.registerAction(macroContainer);
     state.getMacros().add(macroContainer);
+    anActionJbList.setSelectedIndex(persistedMacros.size() - 1);
   }
 
   public void deleteSelected() {
@@ -90,14 +91,8 @@ public final class MacroManagementService {
   }
 
   public void runSelected(AnActionEvent event) {
-    var selectedIndices = anActionJbList.getSelectedIndices();
-    var selectedItems = new ArrayList<MacroContainer>();
-
-    for (int selectedIndex : selectedIndices) {
-      selectedItems.add(persistedMacros.getElementAt(selectedIndex));
-    }
-
-    selectedItems.stream()
+    anActionJbList.getSelectedValuesList()
+        .stream()
         .map(MacroContainer::getActions)
         .forEach(actions -> helperService.executeActions(actions, event));
   }
@@ -108,14 +103,7 @@ public final class MacroManagementService {
   }
 
   public List<MacroContainer> getCurrentSelectedMacros() {
-    var selectedIndices = anActionJbList.getSelectedIndices();
-    var selectedItems = new ArrayList<MacroContainer>();
-
-    for (int selectedIndex : selectedIndices) {
-      selectedItems.add(persistedMacros.getElementAt(selectedIndex));
-    }
-
-    return selectedItems;
+    return anActionJbList.getSelectedValuesList();
   }
 
   public MacroContainer getMacro(String macroName) {

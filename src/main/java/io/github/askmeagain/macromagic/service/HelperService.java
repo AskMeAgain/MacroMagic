@@ -66,6 +66,7 @@ public final class HelperService {
 
     var macroMagicGroup = (DefaultActionGroup) actionManager.getAction("io.github.askmeagain.macromagic.actions.groups.refactoring");
     actionManager.registerAction(macroActionPrefix + macroContainer.getMacroName(), macroAction, pluginId);
+
     macroMagicGroup.addAction(macroAction);
   }
 

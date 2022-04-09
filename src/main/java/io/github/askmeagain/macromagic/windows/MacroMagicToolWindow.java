@@ -39,13 +39,13 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
     gbc.gridwidth = 1;
 
     var panel = new JPanel(new GridBagLayout());
-    panel.add(createHistoryPanel(), gbc);
+    panel.add(createHistoryPanel(panel), gbc);
 
     gbc.gridx = 0;
     gbc.gridy = 1;
     gbc.gridwidth = 1;
 
-    panel.add(createMacroPanel(), gbc);
+    panel.add(createMacroPanel(panel), gbc);
 
     var content = ApplicationManager.getApplication()
         .getService(ContentFactory.class)
@@ -55,8 +55,8 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
     contentManager.addContent(content);
   }
 
-  private JComponent createHistoryPanel() {
-    var buttonToolBar = createButtonToolBar("history");
+  private JComponent createHistoryPanel(JPanel parent) {
+    var buttonToolBar = createButtonToolBar("history", parent);
 
     var jList = historyManagementService.getAnActionJbList();
 
@@ -67,8 +67,8 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
     return createListPanel(buttonToolBar, jList);
   }
 
-  private JComponent createMacroPanel() {
-    var buttonToolBar = createButtonToolBar("macros");
+  private JComponent createMacroPanel(JPanel parent) {
+    var buttonToolBar = createButtonToolBar("macros", parent);
 
     var jList = macroManagementService.getAnActionJbList();
     jList.setDragEnabled(true);
@@ -106,12 +106,12 @@ public class MacroMagicToolWindow implements ToolWindowFactory, DumbAware {
     return panel;
   }
 
-  private JComponent createButtonToolBar(String groupName) {
+  private JComponent createButtonToolBar(String groupName, JPanel parent) {
 
     var instance = ActionManager.getInstance();
     var actionGroup = (ActionGroup) instance.getAction("io.github.askmeagain.macromagic.group." + groupName);
     var toolbar = instance.createActionToolbar("macro_magic_group_" + groupName, actionGroup, true);
-
+    toolbar.setTargetComponent(parent);
     return toolbar.getComponent();
   }
 
