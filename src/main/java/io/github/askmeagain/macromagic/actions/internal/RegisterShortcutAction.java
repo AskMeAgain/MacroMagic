@@ -1,19 +1,13 @@
 package io.github.askmeagain.macromagic.actions.internal;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.keymap.impl.ui.EditKeymapsDialog;
-import io.github.askmeagain.macromagic.service.MacroManagementService;
-import lombok.Getter;
+import io.github.askmeagain.macromagic.actions.MacroMagicBaseAction;
 import org.jetbrains.annotations.NotNull;
 
 import static io.github.askmeagain.macromagic.service.HelperService.macroActionPrefix;
 
-public class RegisterShortcutAction extends AnAction implements MacroMagicInternal {
-
-  @Getter(lazy = true)
-  private final MacroManagementService macroManagementService = MacroManagementService.getInstance();
-
+public class RegisterShortcutAction extends MacroMagicBaseAction implements MacroMagicInternal {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     var macros = getMacroManagementService().getCurrentSelectedMacros();
