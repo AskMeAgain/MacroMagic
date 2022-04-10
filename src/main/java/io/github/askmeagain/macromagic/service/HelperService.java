@@ -66,7 +66,8 @@ public final class HelperService {
   public void registerAction(MacroContainer macroContainer) {
     var macroAction = new ExecuteMacroAction(macroContainer);
 
-    var macroMagicGroup = (DefaultActionGroup) getActionManager().getAction("io.github.askmeagain.macromagic.actions.groups.refactoring");
+    var macroMagicGroup = (DefaultActionGroup) getActionManager()
+        .getAction("io.github.askmeagain.macromagic.actions.groups.refactoring");
     getActionManager().registerAction(macroActionPrefix + macroContainer.getMacroName(), macroAction, pluginId);
 
     macroMagicGroup.addAction(macroAction);

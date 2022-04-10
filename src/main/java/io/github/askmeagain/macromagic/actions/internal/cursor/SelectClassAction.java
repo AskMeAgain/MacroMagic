@@ -14,8 +14,8 @@ public class SelectClassAction extends MacroMagicBaseAction {
   public void actionPerformed(@NotNull AnActionEvent e) {
     getPsiFile(e).accept(new JavaRecursiveElementVisitor() {
       @Override
-      public void visitClass(PsiClass aClass) {
-        Arrays.stream(aClass.getChildren())
+      public void visitClass(PsiClass clazz) {
+        Arrays.stream(clazz.getChildren())
             .filter(child -> child instanceof PsiIdentifier)
             .findFirst()
             .ifPresent(identifier -> selectWord(identifier.getTextRange(), e));

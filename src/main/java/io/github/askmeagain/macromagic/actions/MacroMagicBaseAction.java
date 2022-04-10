@@ -110,7 +110,11 @@ public abstract class MacroMagicBaseAction extends AnAction {
         .forEach(virtualFile -> executionActionOnVirtualFile(virtualFile, e, consumer));
   }
 
-  protected void executionActionOnVirtualFile(VirtualFile virtualFile, @NotNull AnActionEvent e, Consumer<AnActionEvent> consumer) {
+  protected void executionActionOnVirtualFile(
+      VirtualFile virtualFile,
+      @NotNull AnActionEvent e,
+      Consumer<AnActionEvent> consumer
+  ) {
     var document = getFileDocumentManager().getDocument(virtualFile);
 
     var editor = getEditorFactory().createEditor(document, e.getProject());
