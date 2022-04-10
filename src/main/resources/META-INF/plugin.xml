@@ -13,7 +13,9 @@
     <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Macro Magic" secondary="false" icon="AllIcons.General.Modified" anchor="right"
+        <toolWindow id="Macro Magic" secondary="false"
+                    icon="AllIcons.Diff.MagicResolveToolbar"
+                    anchor="right"
                     factoryClass="io.github.askmeagain.macromagic.windows.MacroMagicToolWindow"/>
         <applicationConfigurable
                 parentId="tools"
@@ -107,12 +109,12 @@
             <action id="io.github.askmeagain.macromagic.actions.internal.ImportMacroFromXml"
                     class="io.github.askmeagain.macromagic.actions.internal.ImportMacroFromXml"
                     text="ImportMacroFromXml"
-                    icon="AllIcons.Actions.Execute"
+                    icon="AllIcons.ToolbarDecorator.Import"
                     description="ImportMacroFromXml"/>
             <action id="io.github.askmeagain.macromagic.actions.internal.ExportMacroToXml"
                     class="io.github.askmeagain.macromagic.actions.internal.ExportMacroToXml"
                     text="ExportMacroToXml"
-                    icon="AllIcons.Actions.Execute"
+                    icon="AllIcons.ToolbarDecorator.Export"
                     description="ExportMacroToXml"/>
         </group>
 
