@@ -17,9 +17,9 @@
                     factoryClass="io.github.askmeagain.macromagic.windows.MacroMagicToolWindow"/>
         <applicationConfigurable
                 parentId="tools"
-                instance="io.github.askmeagain.macromagic.windows.AppSettingsConfigurable"
-                id="io.github.askmeagain.macromagic.windows.AppSettingsConfigurable"
-                displayName="My Application Settings"/>
+                instance="io.github.askmeagain.macromagic.service.SettingsGuiManager"
+                id="io.github.askmeagain.macromagic.service.SettingsGuiManager"
+                displayName="Macro Magic"/>
     </extensions>
 
     <applicationListeners>

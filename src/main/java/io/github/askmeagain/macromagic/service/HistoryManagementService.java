@@ -65,7 +65,7 @@ public final class HistoryManagementService implements DropTargetListener {
   }
 
   public void addAction(AnAction action) {
-    if (actionHistory.size() == getState().getHistorySize()) {
+    while (actionHistory.size() >= getState().getHistorySize()) {
       actionHistory.removeElementAt(0);
     }
     actionHistory.addElement(action);

@@ -14,6 +14,6 @@ public class MacroMagicState {
 
   List<MacroContainer> macros = new ArrayList<>();
   Boolean running = false;
-  Integer historySize;
+  Integer historySize = 30;
 
 }
