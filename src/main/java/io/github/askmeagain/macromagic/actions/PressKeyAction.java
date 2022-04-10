@@ -36,6 +36,10 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
     });
   }
 
+  public PressKeyAction appendKeyPress(PressKeyAction action) {
+    return new PressKeyAction(originalString + action.getOriginalString());
+  }
+
   @Override
   public String toString() {
     return "Press Key(" + originalString + ")";

@@ -29,19 +29,32 @@ public class SettingsGuiManager implements Configurable {
 
   @Override
   public JComponent createComponent() {
+    var state = getPersistenceManagementService().getState();
+
     settingsComponent = new MacroMagicSettingsWindow();
-    settingsComponent.setHistorySize(getPersistenceManagementService().getState().getHistorySize());
+
+    settingsComponent.setHistorySize(state.getHistorySize());
+    settingsComponent.setAutoCollapse(state.getAutoCollapse());
+
     return settingsComponent.getPanel();
   }
 
   @Override
   public boolean isModified() {
-    return !settingsComponent.getUserNameText().equals(getPersistenceManagementService().getState().getHistorySize());
+    var state = getPersistenceManagementService().getState();
+
+    var historySizeChanged = !settingsComponent.getHistorySize().equals(state.getHistorySize());
+    var autoCollapseChanged = !settingsComponent.getAutoCollapse().equals(state.getAutoCollapse());
+
+    return historySizeChanged || autoCollapseChanged;
   }
 
   @Override
   public void apply() {
-    getPersistenceManagementService().getState().setHistorySize(settingsComponent.getUserNameText());
+    var state = getPersistenceManagementService().getState();
+
+    state.setHistorySize(settingsComponent.getHistorySize());
+    state.setAutoCollapse(settingsComponent.getAutoCollapse());
   }
 
   @Override
