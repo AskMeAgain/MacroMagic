@@ -104,6 +104,16 @@
                     text="RunPersistedMacroAction"
                     icon="AllIcons.Actions.Execute"
                     description="RunPersistedMacroAction"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.ImportMacroFromXml"
+                    class="io.github.askmeagain.macromagic.actions.internal.ImportMacroFromXml"
+                    text="ImportMacroFromXml"
+                    icon="AllIcons.Actions.Execute"
+                    description="ImportMacroFromXml"/>
+            <action id="io.github.askmeagain.macromagic.actions.internal.ExportMacroToXml"
+                    class="io.github.askmeagain.macromagic.actions.internal.ExportMacroToXml"
+                    text="ExportMacroToXml"
+                    icon="AllIcons.Actions.Execute"
+                    description="ExportMacroToXml"/>
         </group>
 
         <action id="io.github.askmeagain.macromagic.actions.PressKeyAction"

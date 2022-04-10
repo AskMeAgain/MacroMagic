@@ -1,5 +1,6 @@
 package io.github.askmeagain.macromagic.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
@@ -8,9 +9,11 @@ import com.intellij.ui.components.JBList;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.DefaultListModel;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,6 +101,26 @@ public final class MacroManagementService {
 
   public List<MacroContainer> getCurrentSelectedMacros() {
     return anActionJbList.getSelectedValuesList();
+  }
+
+  @SneakyThrows
+  public void importMacros(String json) {
+    List<MacroContainer> list = new ObjectMapper().readValue(json, List.class);
+    list.forEach(macroContainer -> persistActions(macroContainer.getActions()
+            .stream()
+            .map(actionDto -> getHelperService().deserializeAction(actionDto))
+            .collect(Collectors.toList()),
+        macroContainer.getMacroName()
+    ));
+  }
+
+  @SneakyThrows
+  public String exportAllMacros() {
+    var temp = new ArrayList<MacroContainer>();
+    for (var i = 0; i < persistedMacros.size(); i++) {
+      temp.add(persistedMacros.get(i));
+    }
+    return new ObjectMapper().writeValueAsString(temp);
   }
 
   public MacroContainer getMacro(String macroName) {
