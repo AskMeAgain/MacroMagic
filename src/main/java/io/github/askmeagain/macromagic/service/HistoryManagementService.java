@@ -128,6 +128,13 @@ public final class HistoryManagementService implements DropTargetListener {
     getState().setRunning(!getState().getRunning());
   }
 
+  public void removeLatestAction() {
+    if (actionHistory.isEmpty()) {
+      return;
+    }
+    actionHistory.removeElementAt(actionHistory.size() - 1);
+  }
+
   @Override
   public void drop(DropTargetDropEvent e) {
     try {

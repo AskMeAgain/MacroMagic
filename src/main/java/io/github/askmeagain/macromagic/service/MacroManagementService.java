@@ -24,13 +24,13 @@ public final class MacroManagementService {
 
   @Getter(lazy = true)
   private final HelperService helperService = HelperService.getInstance();
+  @Getter(lazy = true)
+  private final MacroMagicState state = PersistenceManagementService.getInstance().getState();
+
   @Getter
   private final DefaultListModel<MacroContainer> persistedMacros = new DefaultListModel<>();
   @Getter
   private final JBList<MacroContainer> anActionJbList;
-
-  @Getter(lazy = true)
-  private final MacroMagicState state = PersistenceManagementService.getInstance().getState();
 
   public MacroManagementService() {
     getState().getMacros().forEach(getHelperService()::registerAction);
@@ -61,12 +61,9 @@ public final class MacroManagementService {
     anActionJbList.setSelectedIndex(persistedMacros.size() - 1);
   }
 
-  public void deleteSelected() {
-    getCurrentSelectedMacros().forEach(macroContainer -> {
-      persistedMacros.removeElement(macroContainer);
-      getState().getMacros().remove(macroContainer);
-      getHelperService().unregisterAction(macroContainer);
-    });
+  public static MacroManagementService getInstance() {
+    return ApplicationManager.getApplication()
+        .getService(MacroManagementService.class);
   }
 
   public void combineSelected(String name) {
@@ -92,11 +89,6 @@ public final class MacroManagementService {
         .stream()
         .map(MacroContainer::getActions)
         .forEach(actions -> getHelperService().executeActions(actions, e));
-  }
-
-  public static MacroManagementService getInstance() {
-    return ApplicationManager.getApplication()
-        .getService(MacroManagementService.class);
   }
 
   public List<MacroContainer> getCurrentSelectedMacros() {
@@ -135,5 +127,19 @@ public final class MacroManagementService {
     }
 
     throw new RuntimeException("Not found");
+  }
+
+  public void deleteSelected() {
+    var selectedIndices = anActionJbList.getSelectedIndices();
+    getCurrentSelectedMacros().forEach(macroContainer -> {
+      persistedMacros.removeElement(macroContainer);
+      getState().getMacros().remove(macroContainer);
+      getHelperService().unregisterAction(macroContainer);
+    });
+
+    if (selectedIndices.length > 0) {
+      var selectedIndex = selectedIndices[0] == selectedIndices.length ? selectedIndices[0] - 1 : selectedIndices[0];
+      anActionJbList.setSelectedIndex(selectedIndex);
+    }
   }
 }

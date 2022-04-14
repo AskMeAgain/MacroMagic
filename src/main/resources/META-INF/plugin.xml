@@ -8,6 +8,8 @@
     <em>most HTML tags may be used</em>
     ]]></description>
 
+    <idea-version since-build="213.0"/>
+
     <version>0.0.1</version>
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.java</depends>
@@ -101,11 +103,6 @@
                     text="RegisterShortcutAction"
                     icon="AllIcons.General.Settings"
                     description="RegisterShortcutAction"/>
-            <action id="io.github.askmeagain.macromagic.actions.internal.RunPersistedMacroAction"
-                    class="io.github.askmeagain.macromagic.actions.internal.RunPersistedMacroAction"
-                    text="RunPersistedMacroAction"
-                    icon="AllIcons.Actions.Execute"
-                    description="RunPersistedMacroAction"/>
             <action id="io.github.askmeagain.macromagic.actions.internal.ImportMacroFromXml"
                     class="io.github.askmeagain.macromagic.actions.internal.ImportMacroFromXml"
                     text="ImportMacroFromXml"

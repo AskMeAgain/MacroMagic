@@ -5,7 +5,6 @@ plugins {
 }
 
 group 'io.github.askmeagain'
-version System.getenv("RELEASE_VERSION")
 
 repositories {
     mavenCentral()
@@ -20,19 +19,20 @@ dependencies {
 
     implementation "ch.qos.logback:logback-classic:${logback_classic_version}"
 
-    implementation "com.fasterxml.jackson.core:jackson-databind:2.13.0"
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.13.0"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jackson_version}"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jackson_version}"
 
 }
 
 
 intellij {
+    updateSinceUntilBuild = false
     version = '2021.3.1'
     plugins = ['com.intellij.java']
 }
 
 patchPluginXml {
-    version = project.getVersion()
+    version = System.getenv("RELEASE_VERSION") ?: "0.9.999-SNAPSHOT"
     changeNotes = new File("marketplace-changenotes.html").text
     pluginDescription = new File("marketplace-description.html").text
 }

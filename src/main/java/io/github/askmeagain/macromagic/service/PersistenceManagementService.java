@@ -12,10 +12,6 @@ import org.jetbrains.annotations.NotNull;
 @State(name = "MacroMagicState", storages = @Storage("macromagic.xml"))
 public final class PersistenceManagementService implements PersistentStateComponent<MacroMagicState> {
 
-  public static PersistenceManagementService getInstance() {
-    return ApplicationManager.getApplication().getService(PersistenceManagementService.class);
-  }
-
   private MacroMagicState macroMagicState = new MacroMagicState();
 
   @Override
@@ -26,5 +22,9 @@ public final class PersistenceManagementService implements PersistentStateCompon
   @Override
   public void loadState(@NotNull MacroMagicState state) {
     macroMagicState = state;
+  }
+
+  public static PersistenceManagementService getInstance() {
+    return ApplicationManager.getApplication().getService(PersistenceManagementService.class);
   }
 }
