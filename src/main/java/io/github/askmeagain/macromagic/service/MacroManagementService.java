@@ -2,7 +2,6 @@ package io.github.askmeagain.macromagic.service;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
@@ -82,13 +81,6 @@ public final class MacroManagementService {
     persistedMacros.addElement(macroContainer);
     getHelperService().registerAction(macroContainer);
     getState().getMacros().add(macroContainer);
-  }
-
-  public void runSelected(AnActionEvent e) {
-    getCurrentSelectedMacros()
-        .stream()
-        .map(MacroContainer::getActions)
-        .forEach(actions -> getHelperService().executeActions(actions, e));
   }
 
   public List<MacroContainer> getCurrentSelectedMacros() {
