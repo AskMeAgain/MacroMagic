@@ -3,10 +3,9 @@
     <name>MacroMagic</name>
     <vendor email="20632124+AskMeAgain@users.noreply.github.com" url="https://github.com/AskMeAgain">AskMeAgain</vendor>
 
-    <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-    ]]></description>
+    <description>
+        <!-- Will be added via Gradle script-->
+    </description>
 
     <idea-version since-build="213.0"/>
 
@@ -122,7 +121,8 @@
         <group id="io.github.askmeagain.macromagic.actions.groups.refactoring"
                text="MacroMagic"
                popup="true">
-            <add-to-group group-id="RefactoringMenu" anchor="last"/>
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after"
+                          relative-to-action="ProjectViewPopupMenuRefactoringGroup"/>
         </group>
         <group id="io.github.askmeagain.macromagic.actions.groups.utils"
                text="MacroMagic Utils"

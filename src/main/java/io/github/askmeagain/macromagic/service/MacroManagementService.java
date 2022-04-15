@@ -60,11 +60,6 @@ public final class MacroManagementService {
     anActionJbList.setSelectedIndex(persistedMacros.size() - 1);
   }
 
-  public static MacroManagementService getInstance() {
-    return ApplicationManager.getApplication()
-        .getService(MacroManagementService.class);
-  }
-
   public void combineSelected(String name) {
     var selectedItems = getCurrentSelectedMacros();
 
@@ -133,5 +128,10 @@ public final class MacroManagementService {
       var selectedIndex = selectedIndices[0] == selectedIndices.length ? selectedIndices[0] - 1 : selectedIndices[0];
       anActionJbList.setSelectedIndex(selectedIndex);
     }
+  }
+
+  public static MacroManagementService getInstance() {
+    return ApplicationManager.getApplication()
+        .getService(MacroManagementService.class);
   }
 }

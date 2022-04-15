@@ -18,6 +18,8 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
   @Getter
   @Setter
   private String originalString;
+  @Getter
+  @Setter
   private boolean inEditor;
 
   public PressKeyAction(String s, boolean inEditor) {
@@ -42,6 +44,7 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
       robot.keyPress(extendedKeyCodeForChar);
       robot.keyRelease(extendedKeyCodeForChar);
     }
+    robot.delay(10);
   }
 
   private void writeInEditor(@NotNull AnActionEvent e) {
