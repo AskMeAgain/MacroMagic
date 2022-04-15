@@ -20,6 +20,7 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
   private String originalString;
   private boolean inEditor;
 
+  @SneakyThrows
   public PressKeyAction(String originalString, boolean inEditor) {
     this.originalString = originalString;
     this.inEditor = inEditor;
@@ -40,9 +41,11 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
     for (var c : originalString.toCharArray()) {
       var extendedKeyCodeForChar = KeyEvent.getExtendedKeyCodeForChar(c);
       robot.keyPress(extendedKeyCodeForChar);
+      robot.delay(10);
       robot.keyRelease(extendedKeyCodeForChar);
     }
-    robot.delay(10);
+
+    robot.delay(100);
   }
 
   private void writeInEditor(@NotNull AnActionEvent e) {

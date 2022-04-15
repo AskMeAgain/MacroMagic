@@ -4,6 +4,7 @@ import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.actionSystem.ActionPlaces;
+import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
@@ -14,8 +15,10 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -36,28 +39,29 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
     var fromFileTree = ActionPlaces.isPopupPlace(e.getPlace());
     var fromWithinEditor = e.getData(CommonDataKeys.EDITOR) != null;
 
+    Queue<AnAction> queue = null;
+
     if (fromWithinEditor) {
-      getCollapsedAction().actionPerformed(e);
+      queue = getCollapsedAction();
     } else if (fromFileTree) {
-      runActionOnSelectFiles(e);
+      queue = runActionOnSelectFiles(e);
+    } else {
+      queue = new ArrayDeque<>();
     }
+
+    System.out.println("----------------------------------");
+
+    new QueueAction(queue).actionPerformed(e);
   }
 
-  private IntelligentAction getCollapsedAction() {
-    var actions = macroContainer.getActions()
+  private Queue<AnAction> getCollapsedAction() {
+    return macroContainer.getActions()
         .stream()
         .map(getHelperService()::deserializeAction)
-        .collect(Collectors.toList());
-
-    var resultAction = new IntelligentAction(actions.get(0));
-    for (var i = 1; i < actions.size(); i++) {
-      resultAction = resultAction.withNextAction(actions.get(i));
-    }
-
-    return resultAction;
+        .collect(Collectors.toCollection(ArrayDeque::new));
   }
 
-  private void runActionOnSelectFiles(@NotNull AnActionEvent e) {
+  private ArrayDeque<AnAction> runActionOnSelectFiles(@NotNull AnActionEvent e) {
     var project = e.getProject();
     var virtualFiles = Arrays.stream(ProjectView.getInstance(project)
             .getCurrentProjectViewPane()
@@ -67,15 +71,14 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
         .map(BasePsiNode::getVirtualFile)
         .collect(Collectors.toList());
 
-    var temp = getCollapsedAction().withBeforeAction(new OpenEditor(virtualFiles.get(0), e.getProject()));
+    var queue = new ArrayDeque<AnAction>();
 
-    for (var i = 1; i < virtualFiles.size(); i++) {
-      temp = temp
-          .withNextAction(new OpenEditor(virtualFiles.get(i), e.getProject()))
-          .withNextAction(getCollapsedAction());
+    for (var i = 0; i < virtualFiles.size(); i++) {
+      queue.add(new OpenEditor(virtualFiles.get(i), e.getProject()));
+      queue.addAll(getCollapsedAction());
     }
 
-    temp.actionPerformed(e);
+    return queue;
   }
 
   @Override
