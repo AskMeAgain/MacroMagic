@@ -12,18 +12,16 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 
+@Getter
+@Setter
 @NoArgsConstructor
 public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicInternal {
 
-  @Getter
-  @Setter
   private String originalString;
-  @Getter
-  @Setter
   private boolean inEditor;
 
-  public PressKeyAction(String s, boolean inEditor) {
-    originalString = s;
+  public PressKeyAction(String originalString, boolean inEditor) {
+    this.originalString = originalString;
     this.inEditor = inEditor;
   }
 

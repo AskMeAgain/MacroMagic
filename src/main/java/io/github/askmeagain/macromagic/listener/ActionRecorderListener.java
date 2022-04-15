@@ -13,9 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
+import java.util.Set;
 
 @Slf4j
 public class ActionRecorderListener implements AnActionListener {
+
+  private static final Set<Integer> notAllowedKeys = Set.of(8, 10, 27, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123);
 
   @Getter(lazy = true)
   private final HistoryManagementService historyManagementService = HistoryManagementService.getInstance();
@@ -29,12 +32,8 @@ public class ActionRecorderListener implements AnActionListener {
         var newEvent = (KeyEvent) e;
 
         if (!newEvent.isControlDown() && newEvent.getID() == KeyEvent.KEY_PRESSED) {
-          if (newEvent.getKeyChar() == '\n') {
-            System.out.println("Enter key key!");
-          } else if (newEvent.getKeyCode() == 27) {
-            System.out.println("Escape pressed!");
-          } else if (newEvent.getKeyCode() == 8) {
-            System.out.println("Backspace pressed!");
+          if (notAllowedKeys.contains(newEvent.getKeyCode())) {
+            System.out.println("Filtered Key");
           } else {
             System.out.println("Pressed: " + newEvent.getKeyChar() + " code: " + newEvent.getKeyCode());
             getHistoryManagementService().addAction(new PressKeyAction((String.valueOf(newEvent.getKeyChar())), false));

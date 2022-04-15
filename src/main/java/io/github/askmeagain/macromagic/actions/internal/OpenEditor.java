@@ -1,22 +1,21 @@
-package io.github.askmeagain.macromagic.actions;
+package io.github.askmeagain.macromagic.actions.internal;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.CaretState;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
+import io.github.askmeagain.macromagic.actions.MacroMagicBaseAction;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-public class OpenEditorAndRunActionAction extends MacroMagicBaseAction {
+public class OpenEditor extends MacroMagicBaseAction implements MacroMagicInternal {
 
   private final VirtualFile virtualFile;
-  private final AnAction nextAction;
   private final Project project;
 
   @Override
@@ -25,7 +24,6 @@ public class OpenEditorAndRunActionAction extends MacroMagicBaseAction {
     var document = getFileDocumentManager().getDocument(virtualFile);
 
     var editor = getEditorFactory().createEditor(document, e.getProject());
-    var context = getDataManager().getDataContext(editor.getContentComponent());
 
     var range = new TextRange(0, 0);
 
@@ -37,8 +35,5 @@ public class OpenEditorAndRunActionAction extends MacroMagicBaseAction {
 
     FileEditorManager.getInstance(project).openFile(virtualFile, true);
 
-    if (nextAction != null) {
-      getApplication().invokeLater(() -> nextAction.actionPerformed(e.withDataContext(context)));
-    }
   }
 }

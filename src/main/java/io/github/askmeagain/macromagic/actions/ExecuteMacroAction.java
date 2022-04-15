@@ -4,9 +4,10 @@ import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
 import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
 import com.intellij.openapi.actionSystem.ActionPlaces;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
+import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
+import io.github.askmeagain.macromagic.actions.internal.OpenEditor;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class ExecuteMacroAction extends MacroMagicBaseAction {
+public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMagicInternal {
 
   @Getter
   @Setter
@@ -42,13 +43,13 @@ public class ExecuteMacroAction extends MacroMagicBaseAction {
     }
   }
 
-  private AnAction getCollapsedAction() {
+  private IntelligentAction getCollapsedAction() {
     var actions = macroContainer.getActions()
         .stream()
         .map(getHelperService()::deserializeAction)
         .collect(Collectors.toList());
 
-    var resultAction = new IntelligentAction(actions.get(0), null);
+    var resultAction = new IntelligentAction(actions.get(0));
     for (var i = 1; i < actions.size(); i++) {
       resultAction = resultAction.withNextAction(actions.get(i));
     }
@@ -66,9 +67,12 @@ public class ExecuteMacroAction extends MacroMagicBaseAction {
         .map(BasePsiNode::getVirtualFile)
         .collect(Collectors.toList());
 
-    var temp = new OpenEditorAndRunActionAction(virtualFiles.get(0), getCollapsedAction(), e.getProject());
+    var temp = getCollapsedAction().withBeforeAction(new OpenEditor(virtualFiles.get(0), e.getProject()));
+
     for (var i = 1; i < virtualFiles.size(); i++) {
-      temp = new OpenEditorAndRunActionAction(virtualFiles.get(i), new SingleActionWrapper(getCollapsedAction(), temp), e.getProject());
+      temp = temp
+          .withNextAction(new OpenEditor(virtualFiles.get(i), e.getProject()))
+          .withNextAction(getCollapsedAction());
     }
 
     temp.actionPerformed(e);

@@ -8,12 +8,9 @@ import com.intellij.openapi.components.Service;
 import com.intellij.openapi.extensions.PluginId;
 import io.github.askmeagain.macromagic.actions.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.actions.PressKeyAction;
-import io.github.askmeagain.macromagic.actions.SingleActionWrapper;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.PersistedActionDto;
 import lombok.Getter;
-
-import java.util.List;
 
 @Service
 public final class HelperService {
@@ -69,14 +66,5 @@ public final class HelperService {
 
   public AnAction createMacroAction(MacroContainer macroContainer) {
     return getActionManager().getAction(macroActionPrefix + macroContainer.getMacroName());
-  }
-
-  public AnAction collapseActions(List<AnAction> actions) {
-    var temp = new SingleActionWrapper(actions.get(0), null);
-    for (var i = 1; i < actions.size(); i++) {
-      temp = new SingleActionWrapper(actions.get(i), temp);
-    }
-
-    return temp;
   }
 }
