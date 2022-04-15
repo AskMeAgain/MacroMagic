@@ -48,7 +48,12 @@ public class ExecuteMacroAction extends MacroMagicBaseAction {
         .map(getHelperService()::deserializeAction)
         .collect(Collectors.toList());
 
-    return getHelperService().collapseActions(actions);
+    var resultAction = new IntelligentAction(actions.get(0), null);
+    for (var i = 1; i < actions.size(); i++) {
+      resultAction = resultAction.withNextAction(actions.get(i));
+    }
+
+    return resultAction;
   }
 
   private void runActionOnSelectFiles(@NotNull AnActionEvent e) {
