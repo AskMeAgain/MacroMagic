@@ -6,6 +6,7 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.extensions.PluginId;
+import io.github.askmeagain.macromagic.actions.EditorKeyInputAction;
 import io.github.askmeagain.macromagic.actions.ExecuteMacroAction;
 import io.github.askmeagain.macromagic.actions.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
@@ -28,14 +29,12 @@ public final class HelperService {
 
   public AnAction deserializeAction(PersistedActionDto persistedActionDto) {
     if (persistedActionDto.getActionId().equals("io.github.askmeagain.macromagic.actions.PressKeyAction")) {
-      var castedAction = new PressKeyAction();
-      var additionalInformation = persistedActionDto.getAdditionalInformation();
-      castedAction.setOriginalString(additionalInformation.substring(4));
-      castedAction.setInEditor(additionalInformation.charAt(0) == '1');
-      return castedAction;
+      return new PressKeyAction(persistedActionDto.getAdditionalInformation());
+    } else if (persistedActionDto.getActionId().equals("io.github.askmeagain.macromagic.actions.EditorKeyInputAction")) {
+      return new EditorKeyInputAction(persistedActionDto.getAdditionalInformation());
+    } else {
+      return getActionManager().getAction(persistedActionDto.getActionId());
     }
-
-    return getActionManager().getAction(persistedActionDto.getActionId());
   }
 
   public PersistedActionDto serializeAction(AnAction anAction) {
@@ -43,7 +42,15 @@ public final class HelperService {
       var castedAction = (PressKeyAction) anAction;
       return new PersistedActionDto(
           "io.github.askmeagain.macromagic.actions.PressKeyAction",
-          (castedAction.isInEditor() ? 1 : 0) + "###" + castedAction.getOriginalString()
+          castedAction.getOriginalString()
+      );
+    }
+
+    if (anAction instanceof EditorKeyInputAction) {
+      var castedAction = (EditorKeyInputAction) anAction;
+      return new PersistedActionDto(
+          "io.github.askmeagain.macromagic.actions.EditorKeyInputAction",
+          castedAction.getOriginalString()
       );
     }
 

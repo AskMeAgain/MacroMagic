@@ -4,7 +4,6 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
-import io.github.askmeagain.macromagic.actions.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import lombok.Getter;
@@ -66,16 +65,7 @@ public final class HistoryManagementService implements DropTargetListener {
   }
 
   public void addAction(AnAction action) {
-    if (action instanceof PressKeyAction && !actionHistory.isEmpty()
-        && actionHistory.lastElement() instanceof PressKeyAction && getState().getAutoCollapse()
-    ) {
-      var existingAction = (PressKeyAction) actionHistory.lastElement();
-      var newAction = existingAction.appendKeyPress((PressKeyAction) action);
-      actionHistory.removeElementAt(actionHistory.size() - 1);
-      actionHistory.addElement(newAction);
-    } else {
-      actionHistory.addElement(action);
-    }
+    actionHistory.addElement(action);
 
     while (actionHistory.size() > getState().getHistorySize()) {
       actionHistory.removeElementAt(0);

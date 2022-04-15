@@ -34,7 +34,6 @@ public class SettingsGuiManager implements Configurable {
     settingsComponent = new MacroMagicSettingsWindow();
 
     settingsComponent.setHistorySize(state.getHistorySize());
-    settingsComponent.setAutoCollapse(state.getAutoCollapse());
 
     return settingsComponent.getPanel();
   }
@@ -43,10 +42,7 @@ public class SettingsGuiManager implements Configurable {
   public boolean isModified() {
     var state = getPersistenceManagementService().getState();
 
-    var historySizeChanged = !settingsComponent.getHistorySize().equals(state.getHistorySize());
-    var autoCollapseChanged = !settingsComponent.getAutoCollapse().equals(state.getAutoCollapse());
-
-    return historySizeChanged || autoCollapseChanged;
+    return !settingsComponent.getHistorySize().equals(state.getHistorySize());
   }
 
   @Override
@@ -54,7 +50,6 @@ public class SettingsGuiManager implements Configurable {
     var state = getPersistenceManagementService().getState();
 
     state.setHistorySize(settingsComponent.getHistorySize());
-    state.setAutoCollapse(settingsComponent.getAutoCollapse());
   }
 
   @Override

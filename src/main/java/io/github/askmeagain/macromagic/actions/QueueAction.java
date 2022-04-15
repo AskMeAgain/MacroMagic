@@ -21,8 +21,7 @@ public class QueueAction extends MacroMagicBaseAction {
     action.actionPerformed(e);
 
     if (action instanceof ActionEventChanger) {
-      var newActionEvent = ((ActionEventChanger) action).getNewActionEvent();
-      e = newActionEvent;
+      e = ((ActionEventChanger) action).getNewActionEvent();
     }
 
     final var newEvent = e;

@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.ex.AnActionListener;
+import io.github.askmeagain.macromagic.actions.EditorKeyInputAction;
 import io.github.askmeagain.macromagic.actions.PressKeyAction;
 import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
 import io.github.askmeagain.macromagic.service.HistoryManagementService;
@@ -36,7 +37,7 @@ public class ActionRecorderListener implements AnActionListener {
             System.out.println("Filtered Key");
           } else {
             System.out.println("Pressed: " + newEvent.getKeyChar() + " code: " + newEvent.getKeyCode());
-            getHistoryManagementService().addAction(new PressKeyAction((String.valueOf(newEvent.getKeyChar())), false));
+            getHistoryManagementService().addAction(new PressKeyAction((String.valueOf(newEvent.getKeyChar()))));
           }
         }
       }
@@ -49,7 +50,7 @@ public class ActionRecorderListener implements AnActionListener {
   public void beforeEditorTyping(char c, @NotNull DataContext dataContext) {
     if (getHistoryManagementService().isRunning()) {
       getHistoryManagementService().removeLatestAction();
-      getHistoryManagementService().addAction(new PressKeyAction(String.valueOf(c), true));
+      getHistoryManagementService().addAction(new EditorKeyInputAction(String.valueOf(c)));
     }
   }
 
