@@ -9,6 +9,6 @@ Improves on the existing Macro implementation in Intellij Idea!
 * Nice GUI features
 * Util actions for macros: JumpToClassName, JumpToAnnotations etc
 * Register shortcuts directly
-* Drag and drop a macro to the edit window, to import this macro as a single action
+* Execute Macros on all selected files (right click -> macro magic)
+* Drag and drop a macro into the edit window to import this macro as a single action
 
-![macromagic](MacroMagic.png)

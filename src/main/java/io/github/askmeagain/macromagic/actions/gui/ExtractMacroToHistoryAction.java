@@ -8,6 +8,13 @@ import org.jetbrains.annotations.NotNull;
 public class ExtractMacroToHistoryAction extends MacroMagicBaseAction implements MacroMagicInternal {
 
   @Override
+  public void update(@NotNull AnActionEvent e) {
+    var isEmpty = getMacroManagementService().getCurrentSelectedMacros().isEmpty();
+
+    e.getPresentation().setEnabled(!isEmpty);
+  }
+
+  @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     var currentSelectMacros = getMacroManagementService().getCurrentSelectedMacros();
     getHistoryManagementService().importMacro(currentSelectMacros);

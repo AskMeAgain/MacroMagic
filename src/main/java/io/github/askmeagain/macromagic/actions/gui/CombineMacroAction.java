@@ -8,6 +8,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.JOptionPane;
 
 public class CombineMacroAction extends MacroMagicBaseAction implements MacroMagicInternal {
+
+  @Override
+  public void update(@NotNull AnActionEvent e) {
+    var isEmpty = getMacroManagementService().getCurrentSelectedMacros().isEmpty();
+
+    e.getPresentation().setEnabled(!isEmpty);
+  }
+
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     var name = (String) JOptionPane.showInputDialog(null,

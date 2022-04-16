@@ -12,6 +12,14 @@ import java.io.FileOutputStream;
 import java.time.LocalDate;
 
 public class ExportMacroToXml extends MacroMagicBaseAction implements MacroMagicInternal {
+
+  @Override
+  public void update(@NotNull AnActionEvent e) {
+    var isEmpty = getMacroManagementService().getCurrentSelectedMacros().isEmpty();
+
+    e.getPresentation().setEnabled(!isEmpty);
+  }
+
   @SneakyThrows
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {

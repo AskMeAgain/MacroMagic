@@ -9,6 +9,14 @@ import org.jetbrains.annotations.NotNull;
 import static io.github.askmeagain.macromagic.service.HelperService.macroActionPrefix;
 
 public class RegisterShortcutAction extends MacroMagicBaseAction implements MacroMagicInternal {
+
+  @Override
+  public void update(@NotNull AnActionEvent e) {
+    var isEmpty = getMacroManagementService().getCurrentSelectedMacros().isEmpty();
+
+    e.getPresentation().setEnabled(!isEmpty);
+  }
+
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     var macros = getMacroManagementService().getCurrentSelectedMacros();

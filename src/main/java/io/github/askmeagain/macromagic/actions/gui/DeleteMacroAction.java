@@ -6,6 +6,14 @@ import io.github.askmeagain.macromagic.actions.internal.MacroMagicBaseAction;
 import org.jetbrains.annotations.NotNull;
 
 public class DeleteMacroAction extends MacroMagicBaseAction implements MacroMagicInternal {
+
+  @Override
+  public void update(@NotNull AnActionEvent e) {
+    var isEmpty = getMacroManagementService().getCurrentSelectedMacros().isEmpty();
+
+    e.getPresentation().setEnabled(!isEmpty);
+  }
+
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
     getMacroManagementService().deleteSelected();
