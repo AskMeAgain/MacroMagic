@@ -1,4 +1,4 @@
-package io.github.askmeagain.macromagic.actions;
+package io.github.askmeagain.macromagic.actions.internal;
 
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
@@ -7,8 +7,7 @@ import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import io.github.askmeagain.macromagic.actions.internal.MacroMagicInternal;
-import io.github.askmeagain.macromagic.actions.internal.OpenEditor;
+import io.github.askmeagain.macromagic.actions.MacroMagicInternal;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,22 +38,20 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
     var fromFileTree = ActionPlaces.isPopupPlace(e.getPlace());
     var fromWithinEditor = e.getData(CommonDataKeys.EDITOR) != null;
 
-    Queue<AnAction> queue = null;
+    Queue<AnAction> queue;
 
     if (fromWithinEditor) {
-      queue = getCollapsedAction();
+      queue = getQueueFromMacroContainer();
     } else if (fromFileTree) {
       queue = runActionOnSelectFiles(e);
     } else {
       queue = new ArrayDeque<>();
     }
 
-    System.out.println("----------------------------------");
-
     new QueueAction(queue).actionPerformed(e);
   }
 
-  private Queue<AnAction> getCollapsedAction() {
+  private Queue<AnAction> getQueueFromMacroContainer() {
     return macroContainer.getActions()
         .stream()
         .map(getHelperService()::deserializeAction)
@@ -63,20 +60,18 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
 
   private ArrayDeque<AnAction> runActionOnSelectFiles(@NotNull AnActionEvent e) {
     var project = e.getProject();
-    var virtualFiles = Arrays.stream(ProjectView.getInstance(project)
-            .getCurrentProjectViewPane()
-            .getSelectedUserObjects())
-        .map(x -> (PsiFileNode) x)
-        .filter(Objects::nonNull)
-        .map(BasePsiNode::getVirtualFile)
-        .collect(Collectors.toList());
-
     var queue = new ArrayDeque<AnAction>();
 
-    for (var i = 0; i < virtualFiles.size(); i++) {
-      queue.add(new OpenEditor(virtualFiles.get(i), e.getProject()));
-      queue.addAll(getCollapsedAction());
-    }
+    Arrays.stream(ProjectView.getInstance(project)
+            .getCurrentProjectViewPane()
+            .getSelectedUserObjects())
+        .map(file -> (PsiFileNode) file)
+        .filter(Objects::nonNull)
+        .map(BasePsiNode::getVirtualFile)
+        .forEach(virtualFile -> {
+          queue.add(new OpenEditor(virtualFile, project));
+          queue.addAll(getQueueFromMacroContainer());
+        });
 
     return queue;
   }

@@ -6,9 +6,9 @@ import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.openapi.extensions.PluginId;
-import io.github.askmeagain.macromagic.actions.EditorKeyInputAction;
-import io.github.askmeagain.macromagic.actions.ExecuteMacroAction;
-import io.github.askmeagain.macromagic.actions.PressKeyAction;
+import io.github.askmeagain.macromagic.actions.internal.EditorKeyInputAction;
+import io.github.askmeagain.macromagic.actions.internal.ExecuteMacroAction;
+import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.PersistedActionDto;
 import lombok.Getter;
@@ -28,9 +28,9 @@ public final class HelperService {
   }
 
   public AnAction deserializeAction(PersistedActionDto persistedActionDto) {
-    if (persistedActionDto.getActionId().equals("io.github.askmeagain.macromagic.actions.PressKeyAction")) {
+    if (persistedActionDto.getActionId().equals("io.github.askmeagain.macromagic.actions.internal.PressKeyAction")) {
       return new PressKeyAction(persistedActionDto.getAdditionalInformation());
-    } else if (persistedActionDto.getActionId().equals("io.github.askmeagain.macromagic.actions.EditorKeyInputAction")) {
+    } else if (persistedActionDto.getActionId().equals("io.github.askmeagain.macromagic.actions.internal.EditorKeyInputAction")) {
       return new EditorKeyInputAction(persistedActionDto.getAdditionalInformation());
     } else {
       return getActionManager().getAction(persistedActionDto.getActionId());
@@ -41,7 +41,7 @@ public final class HelperService {
     if (anAction instanceof PressKeyAction) {
       var castedAction = (PressKeyAction) anAction;
       return new PersistedActionDto(
-          "io.github.askmeagain.macromagic.actions.PressKeyAction",
+          "io.github.askmeagain.macromagic.actions.internal.PressKeyAction",
           castedAction.getOriginalString()
       );
     }
@@ -49,7 +49,7 @@ public final class HelperService {
     if (anAction instanceof EditorKeyInputAction) {
       var castedAction = (EditorKeyInputAction) anAction;
       return new PersistedActionDto(
-          "io.github.askmeagain.macromagic.actions.EditorKeyInputAction",
+          "io.github.askmeagain.macromagic.actions.internal.EditorKeyInputAction",
           castedAction.getOriginalString()
       );
     }

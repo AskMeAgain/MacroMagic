@@ -1,8 +1,9 @@
-package io.github.askmeagain.macromagic.actions.internal;
+package io.github.askmeagain.macromagic.actions.gui;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import io.github.askmeagain.macromagic.actions.MacroMagicBaseAction;
+import io.github.askmeagain.macromagic.actions.MacroMagicInternal;
+import io.github.askmeagain.macromagic.actions.internal.MacroMagicBaseAction;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.Icon;

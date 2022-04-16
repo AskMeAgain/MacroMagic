@@ -1,9 +1,10 @@
-package io.github.askmeagain.macromagic.actions.internal;
+package io.github.askmeagain.macromagic.actions.gui;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.fileChooser.FileChooserDescriptor;
 import com.intellij.openapi.fileChooser.FileChooserFactory;
-import io.github.askmeagain.macromagic.actions.MacroMagicBaseAction;
+import io.github.askmeagain.macromagic.actions.MacroMagicInternal;
+import io.github.askmeagain.macromagic.actions.internal.MacroMagicBaseAction;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package io.github.askmeagain.macromagic.actions;
+package io.github.askmeagain.macromagic.actions.internal;
 
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -56,10 +56,14 @@ public abstract class MacroMagicBaseAction extends AnAction {
     return data;
   }
 
-  protected void focusEditor(@NotNull AnActionEvent e) {
+  protected AnActionEvent focusEditor(@NotNull AnActionEvent e) {
     var selectedTextEditor = getSelectedTextEditor(e);
 
     IdeFocusManager.getInstance(e.getProject()).requestFocus(selectedTextEditor.getContentComponent(), true);
+
+    var context = getDataManager().getDataContext(selectedTextEditor.getContentComponent());
+
+    return e.withDataContext(context);
   }
 
   protected Editor getSelectedTextEditor(@NotNull AnActionEvent e) {

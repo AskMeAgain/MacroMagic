@@ -8,7 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.github.askmeagain.macromagic.actions.ActionEventChanger;
-import io.github.askmeagain.macromagic.actions.MacroMagicBaseAction;
+import io.github.askmeagain.macromagic.actions.MacroMagicInternal;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
