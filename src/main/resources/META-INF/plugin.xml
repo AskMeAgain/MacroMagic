@@ -107,11 +107,11 @@
                     text="ImportMacroFromXml"
                     icon="AllIcons.ToolbarDecorator.Import"
                     description="ImportMacroFromXml"/>
-            <action id="io.github.askmeagain.macromagic.actions.gui.ExportMacroToXml"
-                    class="io.github.askmeagain.macromagic.actions.gui.ExportMacroToXml"
-                    text="ExportMacroToXml"
+            <action id="io.github.askmeagain.macromagic.actions.gui.ExportAllMacrosToXml"
+                    class="io.github.askmeagain.macromagic.actions.gui.ExportAllMacrosToXml"
+                    text="ExportAllMacrosToXml"
                     icon="AllIcons.ToolbarDecorator.Export"
-                    description="ExportMacroToXml"/>
+                    description="ExportAllMacrosToXml"/>
         </group>
 
         <action id="io.github.askmeagain.macromagic.actions.internal.PressKeyAction"

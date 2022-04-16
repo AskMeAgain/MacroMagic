@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 
-public class ExportMacroToXml extends MacroMagicBaseAction implements MacroMagicInternal {
+public class ExportAllMacrosToXml extends MacroMagicBaseAction implements MacroMagicInternal {
 
   @Override
   public void update(@NotNull AnActionEvent e) {
