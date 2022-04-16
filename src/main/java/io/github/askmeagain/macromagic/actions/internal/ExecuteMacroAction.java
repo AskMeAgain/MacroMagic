@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -55,6 +57,15 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
     return macroContainer.getActions()
         .stream()
         .map(getHelperService()::deserializeAction)
+        .map(x -> {
+          if (x instanceof ExecuteMacroAction) {
+            return ((ExecuteMacroAction) x).getMacroContainer().getActions()
+                .stream().map(getHelperService()::deserializeAction)
+                .collect(Collectors.toList());
+          }
+          return List.of(x);
+        })
+        .flatMap(Collection::stream)
         .collect(Collectors.toCollection(ArrayDeque::new));
   }
 

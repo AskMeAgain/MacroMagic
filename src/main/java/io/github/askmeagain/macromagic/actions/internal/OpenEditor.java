@@ -24,8 +24,6 @@ public class OpenEditor extends MacroMagicBaseAction implements MacroMagicIntern
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
 
-    System.out.println("Open File: " + virtualFile.getName());
-
     var range = new TextRange(0, 0);
 
     var editor = FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(e.getProject(), virtualFile), true);

@@ -33,10 +33,7 @@ public class ActionRecorderListener implements AnActionListener {
         var newEvent = (KeyEvent) e;
 
         if (!newEvent.isControlDown() && newEvent.getID() == KeyEvent.KEY_PRESSED) {
-          if (notAllowedKeys.contains(newEvent.getKeyCode())) {
-            System.out.println("Filtered Key");
-          } else {
-            System.out.println("Pressed: " + newEvent.getKeyChar() + " code: " + newEvent.getKeyCode());
+          if (!notAllowedKeys.contains(newEvent.getKeyCode())) {
             getHistoryManagementService().addAction(new PressKeyAction((String.valueOf(newEvent.getKeyChar()))));
           }
         }
