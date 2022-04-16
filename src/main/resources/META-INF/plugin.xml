@@ -38,8 +38,8 @@
         <group id="io.github.askmeagain.macromagic.group.history"
                text="History Group"
                popup="false">
-            <action id="io.github.askmeagain.macromagic.actions.gui.CreateNewMacroAction"
-                    class="io.github.askmeagain.macromagic.actions.gui.CreateNewMacroAction"
+            <action id="io.github.askmeagain.macromagic.actions.gui.SaveMacroAction"
+                    class="io.github.askmeagain.macromagic.actions.gui.SaveMacroAction"
                     text="CreateNewMacroAction"
                     icon="AllIcons.Actions.MenuSaveall"
                     description="CreateNewMacroAction"/>

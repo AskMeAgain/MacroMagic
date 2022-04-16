@@ -110,7 +110,7 @@ public final class HistoryManagementService implements DropTargetListener {
     anActionJbList.setSelectedIndices(selectedIndices);
   }
 
-  private List<AnAction> getSelectedValuesList() {
+  public List<AnAction> getSelectedValuesList() {
     return anActionJbList.getSelectedValuesList();
   }
 

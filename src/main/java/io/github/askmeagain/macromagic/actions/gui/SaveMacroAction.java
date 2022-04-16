@@ -7,7 +7,14 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.JOptionPane;
 
-public class CreateNewMacroAction extends MacroMagicBaseAction implements MacroMagicInternal {
+public class SaveMacroAction extends MacroMagicBaseAction implements MacroMagicInternal {
+
+  @Override
+  public void update(@NotNull AnActionEvent e) {
+    var isEmpty = getHistoryManagementService().getSelectedValuesList().isEmpty();
+
+    e.getPresentation().setEnabled(!isEmpty);
+  }
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
