@@ -2,7 +2,7 @@ package io.github.askmeagain.macromagic.actions.internal;
 
 import com.intellij.ide.projectView.ProjectView;
 import com.intellij.ide.projectView.impl.nodes.BasePsiNode;
-import com.intellij.ide.projectView.impl.nodes.PsiFileNode;
+import com.intellij.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.openapi.actionSystem.ActionPlaces;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -16,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -57,15 +55,6 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
     return macroContainer.getActions()
         .stream()
         .map(getHelperService()::deserializeAction)
-        .map(x -> {
-          if (x instanceof ExecuteMacroAction) {
-            return ((ExecuteMacroAction) x).getMacroContainer().getActions()
-                .stream().map(getHelperService()::deserializeAction)
-                .collect(Collectors.toList());
-          }
-          return List.of(x);
-        })
-        .flatMap(Collection::stream)
         .collect(Collectors.toCollection(ArrayDeque::new));
   }
 
@@ -76,11 +65,11 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
     Arrays.stream(ProjectView.getInstance(project)
             .getCurrentProjectViewPane()
             .getSelectedUserObjects())
-        .map(file -> (PsiFileNode) file)
+        .map(file -> (ClassTreeNode) file)
         .filter(Objects::nonNull)
         .map(BasePsiNode::getVirtualFile)
         .forEach(virtualFile -> {
-          queue.add(new OpenEditor(virtualFile, project));
+          queue.add(new OpenEditor(virtualFile, project, false));
           queue.addAll(getQueueFromMacroContainer());
         });
 

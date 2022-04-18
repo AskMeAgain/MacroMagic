@@ -19,16 +19,21 @@ public class OpenEditor extends MacroMagicBaseAction implements MacroMagicIntern
 
   private final VirtualFile virtualFile;
   private final Project project;
+  private final boolean keepCursor;
+
   private AnActionEvent anActionEvent;
+
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
 
-    var range = new TextRange(0, 0);
-
     var editor = FileEditorManager.getInstance(project).openTextEditor(new OpenFileDescriptor(e.getProject(), virtualFile), true);
-    var posi = editor.offsetToLogicalPosition(range.getStartOffset());
-    editor.getCaretModel().setCaretsAndSelections(List.of(new CaretState(posi, posi, posi)));
+
+    if (!keepCursor) {
+      var range = new TextRange(0, 0);
+      var posi = editor.offsetToLogicalPosition(range.getStartOffset());
+      editor.getCaretModel().setCaretsAndSelections(List.of(new CaretState(posi, posi, posi)));
+    }
 
     var context = getDataManager().getDataContext(editor.getContentComponent());
 

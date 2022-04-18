@@ -112,6 +112,11 @@
                     text="ExportAllMacrosToXml"
                     icon="AllIcons.ToolbarDecorator.Export"
                     description="ExportAllMacrosToXml"/>
+            <action id="io.github.askmeagain.macromagic.actions.gui.ExecuteMacroGuiAction"
+                    class="io.github.askmeagain.macromagic.actions.gui.ExecuteMacroGuiAction"
+                    text="ExecuteMacroGuiAction"
+                    icon="AllIcons.Actions.Execute"
+                    description="ExecuteMacroGuiAction"/>
         </group>
 
         <action id="io.github.askmeagain.macromagic.actions.internal.PressKeyAction"
@@ -130,7 +135,7 @@
                popup="true">
             <add-to-group group-id="io.github.askmeagain.macromagic.group.history"
                           anchor="before"
-                          relative-to-action="io.github.askmeagain.macromagic.actions.internal.StartStopRecordingAction"/>
+                          relative-to-action="io.github.askmeagain.macromagic.actions.gui.StartStopRecordingAction"/>
 
             <action id="io.github.askmeagain.macromagic.actions.utilsion"
                     class="io.github.askmeagain.macromagic.actions.utils.SelectClassAction"
