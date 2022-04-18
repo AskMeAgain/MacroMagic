@@ -28,6 +28,12 @@ public class QueueAction extends MacroMagicBaseAction {
       actions.addAll(queue);
       queue = actions;
     } else {
+      //editor key collapsing
+      while (action instanceof EditorKeyInputAction && queue.peek() instanceof EditorKeyInputAction) {
+        var next = queue.remove();
+        action = ((EditorKeyInputAction) action).merge((EditorKeyInputAction) next);
+      }
+
       action.actionPerformed(originalEvent);
 
       if (action instanceof ActionEventChanger) {

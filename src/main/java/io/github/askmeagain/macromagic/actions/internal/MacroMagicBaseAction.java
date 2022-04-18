@@ -11,6 +11,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.wm.IdeFocusManager;
 import com.intellij.psi.PsiFile;
@@ -40,6 +41,9 @@ public abstract class MacroMagicBaseAction extends AnAction {
   private final HelperService helperService = HelperService.getInstance();
   @Getter(lazy = true, value = AccessLevel.PROTECTED)
   private final Application application = ApplicationManager.getApplication();
+  @Getter(lazy = true, value = AccessLevel.PROTECTED)
+  private final JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
+
 
   @NotNull
   protected PsiFile getPsiFile(@NotNull AnActionEvent e) {

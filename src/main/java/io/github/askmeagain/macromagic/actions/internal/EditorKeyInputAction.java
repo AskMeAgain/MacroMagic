@@ -32,6 +32,10 @@ public class EditorKeyInputAction extends MacroMagicBaseAction implements MacroM
     });
   }
 
+  public EditorKeyInputAction merge(EditorKeyInputAction action) {
+    return new EditorKeyInputAction(this.getOriginalString() + action.getOriginalString());
+  }
+
   @Override
   public String toString() {
     return "Press Key(" + originalString + "), Editor(true)";

@@ -150,5 +150,10 @@
                     text="PlaceCursorAtTopAction"
                     description="PlaceCursorAtTopAction"/>
         </group>
+        <action id="io.github.askmeagain.macromagic.actions.utils.OpenUtilsPopupAction"
+                class="io.github.askmeagain.macromagic.actions.utils.OpenUtilsPopupAction" text="OpenUtilsPopupAction"
+                description="OpenUtilsPopupAction">
+            <keyboard-shortcut keymap="$default" first-keystroke="ctrl m" second-keystroke="ctrl u"/>
+        </action>
     </actions>
 </idea-plugin>
