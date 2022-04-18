@@ -1,11 +1,14 @@
 package io.github.askmeagain.macromagic.service;
 
+import com.intellij.openapi.actionSystem.ActionGroup;
+import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.MacroMagicState;
+import io.github.askmeagain.macromagic.listener.RightClickContextListener;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,8 +38,12 @@ public final class HistoryManagementService implements DropTargetListener {
   @Getter(lazy = true)
   private final HelperService helperService = HelperService.getInstance();
 
+  private static final String MACRO_UTILS_GROUP = "io.github.askmeagain.macromagic.actions.groups.utils";
+
   public HistoryManagementService() {
     anActionJbList = new JBList<>(actionHistory);
+    var group = (ActionGroup) ActionManager.getInstance().getAction(MACRO_UTILS_GROUP);
+    anActionJbList.addMouseListener(new RightClickContextListener(group));
   }
 
   public static HistoryManagementService getInstance() {
