@@ -75,6 +75,9 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
         .forEach(virtualFile -> {
           queue.add(new OpenEditor(virtualFile, project, false));
           queue.addAll(getQueueFromMacroContainer());
+          if (getPersistenceManagementService().getState().getCloseAfterFileExecution()) {
+            queue.add(new CloseEditor(virtualFile, project));
+          }
         });
 
     return queue;

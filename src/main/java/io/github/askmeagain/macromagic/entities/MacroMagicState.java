@@ -16,5 +16,6 @@ public class MacroMagicState {
   Boolean running = false;
   Integer historySize = 30;
   Integer nestedDepth = 10;
+  Boolean closeAfterFileExecution = false;
 
 }

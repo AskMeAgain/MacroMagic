@@ -32,6 +32,7 @@ public class SettingsGuiManager implements Configurable {
 
     settingsComponent.setHistorySize(state.getHistorySize());
     settingsComponent.setNestedDepth(state.getNestedDepth());
+    settingsComponent.setCloseAfterFileExecution(state.getCloseAfterFileExecution());
 
     return settingsComponent.getPanel();
   }
@@ -42,8 +43,9 @@ public class SettingsGuiManager implements Configurable {
 
     var historySizeChanged = !settingsComponent.getHistorySize().equals(state.getHistorySize());
     var recursiveDepthChanged = !settingsComponent.getNestedDepth().equals(state.getNestedDepth());
+    var closeAfterFileExecutionChanged = !settingsComponent.getCloseAfterFileExecution().equals(state.getCloseAfterFileExecution());
 
-    return historySizeChanged || recursiveDepthChanged;
+    return historySizeChanged || recursiveDepthChanged || closeAfterFileExecutionChanged;
   }
 
   @Override
@@ -52,6 +54,7 @@ public class SettingsGuiManager implements Configurable {
 
     state.setHistorySize(settingsComponent.getHistorySize());
     state.setNestedDepth(settingsComponent.getNestedDepth());
+    state.setCloseAfterFileExecution(settingsComponent.getCloseAfterFileExecution());
   }
 
   @Override
@@ -60,6 +63,7 @@ public class SettingsGuiManager implements Configurable {
 
     state.setHistorySize(30);
     state.setNestedDepth(10);
+    state.setCloseAfterFileExecution(false);
   }
 
   @Override
