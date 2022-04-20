@@ -10,11 +10,14 @@ import javax.swing.JPanel;
 public class MacroMagicSettingsWindow {
 
   private final JPanel settingsPanel;
+
   private final JBTextField fieldHistorySize = new JBTextField();
+  private final JBTextField nestedDepth = new JBTextField();
 
   public MacroMagicSettingsWindow() {
     settingsPanel = FormBuilder.createFormBuilder()
         .addLabeledComponent(new JBLabel("Enter History Size: "), fieldHistorySize, 1, false)
+        .addLabeledComponent(new JBLabel("Recursive Execution Depth: "), nestedDepth, 1, false)
         .addComponentFillVertically(new JPanel(), 0)
         .getPanel();
   }
@@ -31,7 +34,15 @@ public class MacroMagicSettingsWindow {
     return Integer.parseInt(fieldHistorySize.getText());
   }
 
+  public Integer getNestedDepth() {
+    return Integer.parseInt(nestedDepth.getText());
+  }
+
   public void setHistorySize(Integer newHistory) {
     fieldHistorySize.setText(String.valueOf(newHistory));
+  }
+
+  public void setNestedDepth(Integer newRecursiveDepth) {
+    nestedDepth.setText(String.valueOf(newRecursiveDepth));
   }
 }

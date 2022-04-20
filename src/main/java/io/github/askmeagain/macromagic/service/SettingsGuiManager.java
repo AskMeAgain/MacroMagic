@@ -7,9 +7,6 @@ import org.jetbrains.annotations.Nls;
 
 import javax.swing.JComponent;
 
-/**
- * Provides controller functionality for application settings.
- */
 public class SettingsGuiManager implements Configurable {
 
   @Getter(lazy = true)
@@ -34,6 +31,7 @@ public class SettingsGuiManager implements Configurable {
     settingsComponent = new MacroMagicSettingsWindow();
 
     settingsComponent.setHistorySize(state.getHistorySize());
+    settingsComponent.setNestedDepth(state.getNestedDepth());
 
     return settingsComponent.getPanel();
   }
@@ -42,7 +40,10 @@ public class SettingsGuiManager implements Configurable {
   public boolean isModified() {
     var state = getPersistenceManagementService().getState();
 
-    return !settingsComponent.getHistorySize().equals(state.getHistorySize());
+    var historySizeChanged = !settingsComponent.getHistorySize().equals(state.getHistorySize());
+    var recursiveDepthChanged = !settingsComponent.getNestedDepth().equals(state.getNestedDepth());
+
+    return historySizeChanged || recursiveDepthChanged;
   }
 
   @Override
@@ -50,11 +51,15 @@ public class SettingsGuiManager implements Configurable {
     var state = getPersistenceManagementService().getState();
 
     state.setHistorySize(settingsComponent.getHistorySize());
+    state.setNestedDepth(settingsComponent.getNestedDepth());
   }
 
   @Override
   public void reset() {
-    getPersistenceManagementService().getState().setHistorySize(30);
+    var state = getPersistenceManagementService().getState();
+
+    state.setHistorySize(30);
+    state.setNestedDepth(10);
   }
 
   @Override

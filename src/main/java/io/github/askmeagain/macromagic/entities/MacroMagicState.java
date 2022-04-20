@@ -15,5 +15,6 @@ public class MacroMagicState {
   List<MacroContainer> macros = new ArrayList<>();
   Boolean running = false;
   Integer historySize = 30;
+  Integer nestedDepth = 10;
 
 }

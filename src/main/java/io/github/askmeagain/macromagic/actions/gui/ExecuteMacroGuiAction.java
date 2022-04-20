@@ -17,21 +17,21 @@ import java.util.stream.Collectors;
 public class ExecuteMacroGuiAction extends MacroMagicBaseAction {
   @Override
   public void actionPerformed(@NotNull AnActionEvent e) {
-    System.out.println("Macro action");
     var project = e.getProject();
     var queue = new ArrayDeque<AnAction>();
 
     var macroContainers = getMacroManagementService().getCurrentSelectedMacros();
 
     var document = getSelectedTextEditor(e).getDocument();
-
     var virtualFile = getFileDocumentManager().getFile(document);
 
     queue.add(new OpenEditor(virtualFile, project, true));
-    var queueFromMacroContainers = getQueueFromMacroContainers(macroContainers);
-    queue.addAll(queueFromMacroContainers);
+    queue.addAll(getQueueFromMacroContainers(macroContainers));
 
-    new QueueAction(queue).actionPerformed(e);
+    new QueueAction(queue,
+        0,
+        getPersistenceManagementService().getState().getNestedDepth()
+    ).actionPerformed(e);
   }
 
   private Queue<AnAction> getQueueFromMacroContainers(List<MacroContainer> macroContainers) {

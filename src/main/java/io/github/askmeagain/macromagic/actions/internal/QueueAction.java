@@ -14,12 +14,16 @@ import java.util.stream.Collectors;
 public class QueueAction extends MacroMagicBaseAction {
 
   private Queue<AnAction> queue;
+  private int currentNestedDepth;
+  private int maxNestedDepth;
 
   @Override
   public void actionPerformed(@NotNull AnActionEvent originalEvent) {
     var action = queue.remove();
 
-    if (action instanceof ExecuteMacroAction) {
+    if (currentNestedDepth > maxNestedDepth) {
+      //do nothing
+    } else if (action instanceof ExecuteMacroAction) {
       var actions = ((ExecuteMacroAction) action).getMacroContainer().getActions()
           .stream()
           .map(getHelperService()::deserializeAction)
@@ -45,9 +49,11 @@ public class QueueAction extends MacroMagicBaseAction {
 
     if (!queue.isEmpty()) {
       if (queue.peek() instanceof PressKeyAction) {
-        getApplication().executeOnPooledThread(() -> new QueueAction(queue).actionPerformed(newEvent));
+        getApplication().executeOnPooledThread(() -> new QueueAction(queue, currentNestedDepth + 1, maxNestedDepth)
+            .actionPerformed(newEvent));
       } else {
-        getApplication().invokeLater(() -> new QueueAction(queue).actionPerformed(newEvent));
+        getApplication().invokeLater(() -> new QueueAction(queue, currentNestedDepth + 1, maxNestedDepth)
+            .actionPerformed(newEvent));
       }
     }
   }

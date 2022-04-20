@@ -48,7 +48,11 @@ public class ExecuteMacroAction extends MacroMagicBaseAction implements MacroMag
       queue = new ArrayDeque<>();
     }
 
-    new QueueAction(queue).actionPerformed(e);
+    new QueueAction(
+        queue,
+        0,
+        getPersistenceManagementService().getState().getNestedDepth()
+    ).actionPerformed(e);
   }
 
   private Queue<AnAction> getQueueFromMacroContainer() {

@@ -18,6 +18,7 @@ import com.intellij.psi.PsiFile;
 import io.github.askmeagain.macromagic.service.HelperService;
 import io.github.askmeagain.macromagic.service.HistoryManagementService;
 import io.github.askmeagain.macromagic.service.MacroManagementService;
+import io.github.askmeagain.macromagic.service.PersistenceManagementService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,8 @@ public abstract class MacroMagicBaseAction extends AnAction {
   private final Application application = ApplicationManager.getApplication();
   @Getter(lazy = true, value = AccessLevel.PROTECTED)
   private final JBPopupFactory jbPopupFactory = JBPopupFactory.getInstance();
+  @Getter(lazy = true, value = AccessLevel.PROTECTED)
+  private final PersistenceManagementService persistenceManagementService = PersistenceManagementService.getInstance();
 
 
   @NotNull
