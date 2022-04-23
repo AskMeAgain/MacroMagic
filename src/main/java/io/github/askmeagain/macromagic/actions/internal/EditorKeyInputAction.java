@@ -38,6 +38,6 @@ public class EditorKeyInputAction extends MacroMagicBaseAction implements MacroM
 
   @Override
   public String toString() {
-    return "Press Key(" + originalString + "), Editor(true)";
+    return "Insert into Editor(" + originalString + ")";
   }
 }
