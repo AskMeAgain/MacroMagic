@@ -32,8 +32,18 @@ public class PressKeyAction extends MacroMagicBaseAction implements MacroMagicIn
     robot.delay(100);
   }
 
+  public boolean tryRemoveLatestKeyPress() {
+    originalString = originalString.substring(0, originalString.length() - 1);
+
+    return originalString.length() != 0;
+  }
+
+  public PressKeyAction merge(PressKeyAction action) {
+    return new PressKeyAction(this.getOriginalString() + action.getOriginalString());
+  }
+
   @Override
   public String toString() {
-    return "Press Key(" + originalString + "), Editor(false)";
+    return "Press Dialog Key(" + originalString + ")";
   }
 }

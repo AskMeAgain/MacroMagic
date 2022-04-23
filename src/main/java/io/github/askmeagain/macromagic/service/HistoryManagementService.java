@@ -4,6 +4,8 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.Service;
 import com.intellij.ui.components.JBList;
+import io.github.askmeagain.macromagic.actions.internal.EditorKeyInputAction;
+import io.github.askmeagain.macromagic.actions.internal.PressKeyAction;
 import io.github.askmeagain.macromagic.entities.MacroContainer;
 import io.github.askmeagain.macromagic.entities.MacroMagicState;
 import lombok.Getter;
@@ -65,6 +67,22 @@ public final class HistoryManagementService implements DropTargetListener {
   }
 
   public void addAction(AnAction action) {
+
+    if (!actionHistory.isEmpty()) {
+      var lastAction = actionHistory.get(actionHistory.size() - 1);
+      if (action instanceof EditorKeyInputAction && lastAction instanceof EditorKeyInputAction) {
+        var newAction = (EditorKeyInputAction) action;
+        var oldAction = (EditorKeyInputAction) lastAction;
+        action = oldAction.merge(newAction);
+        actionHistory.removeElementAt(actionHistory.size() - 1);
+      } else if (action instanceof PressKeyAction && lastAction instanceof PressKeyAction) {
+        var newAction = (PressKeyAction) action;
+        var oldAction = (PressKeyAction) lastAction;
+        action = oldAction.merge(newAction);
+        actionHistory.removeElementAt(actionHistory.size() - 1);
+      }
+    }
+
     actionHistory.addElement(action);
 
     while (actionHistory.size() > getState().getHistorySize()) {
@@ -118,11 +136,15 @@ public final class HistoryManagementService implements DropTargetListener {
     getState().setRunning(!getState().getRunning());
   }
 
-  public void removeLatestAction() {
+  public void removeLatestKeyPress() {
     if (actionHistory.isEmpty()) {
       return;
     }
-    actionHistory.removeElementAt(actionHistory.size() - 1);
+    var latestAction = (PressKeyAction) actionHistory.remove(actionHistory.size() - 1);
+
+    if (latestAction.tryRemoveLatestKeyPress()) {
+      actionHistory.addElement(latestAction);
+    }
   }
 
   @Override

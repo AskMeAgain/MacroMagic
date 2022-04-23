@@ -19,7 +19,7 @@ import java.util.Set;
 @Slf4j
 public class ActionRecorderListener implements AnActionListener {
 
-  private static final Set<Integer> notAllowedKeys = Set.of(8, 10, 27, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123);
+  private static final Set<Integer> notAllowedKeys = Set.of(8, 10, 16, 27, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123);
 
   @Getter(lazy = true)
   private final HistoryManagementService historyManagementService = HistoryManagementService.getInstance();
@@ -34,6 +34,7 @@ public class ActionRecorderListener implements AnActionListener {
 
         if (!newEvent.isControlDown() && newEvent.getID() == KeyEvent.KEY_PRESSED) {
           if (!notAllowedKeys.contains(newEvent.getKeyCode())) {
+            System.out.println(newEvent.getKeyCode());
             getHistoryManagementService().addAction(new PressKeyAction((String.valueOf(newEvent.getKeyChar()))));
           }
         }
@@ -46,7 +47,7 @@ public class ActionRecorderListener implements AnActionListener {
   @Override
   public void beforeEditorTyping(char c, @NotNull DataContext dataContext) {
     if (getHistoryManagementService().isRunning()) {
-      getHistoryManagementService().removeLatestAction();
+      getHistoryManagementService().removeLatestKeyPress();
       getHistoryManagementService().addAction(new EditorKeyInputAction(String.valueOf(c)));
     }
   }
